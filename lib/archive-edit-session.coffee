@@ -1,38 +1,51 @@
-fsUtils = require 'fs-utils'
 path = require 'path'
+
 _ = require 'underscore'
 archive = require 'ls-archive'
+telepath = require 'telepath'
+
+fsUtils = require 'fs-utils'
 File = require 'file'
 
 module.exports=
 class ArchiveEditSession
+  @acceptsDocuments: true
   registerDeserializer(this)
   @version: 1
 
   @activate: ->
     Project = require 'project'
     Project.registerOpener (filePath) ->
-      new ArchiveEditSession(filePath) if archive.isPathSupported(filePath)
+      new ArchiveEditSession(path: filePath) if archive.isPathSupported(filePath)
 
-  @deserialize: ({path}={}) ->
-    path = project.resolve(path)
-    if fsUtils.isFileSync(path)
-      new ArchiveEditSession(path)
+  @deserialize: (state) ->
+    relativePath = state.get('relativePath')
+    resolvedPath = project.resolve(relativePath) if relativePath
+    if fsUtils.isFileSync(resolvedPath)
+      new ArchiveEditSession(state)
     else
-      console.warn "Could not build archive edit session for path '#{path}' because that file no longer exists"
+      console.warn "Could not build archive edit session for path '#{relativePath}' because that file no longer exists"
 
-  constructor: (@path) ->
-    @file = new File(@path)
+  constructor: (optionsOrState) ->
+    if optionsOrState instanceof telepath.Document
+      @state = optionsOrState
+      resolvedPath = project.resolve(@getRelativePath())
+    else
+      resolvedPath = optionsOrState.path
+      @state = site.createDocument
+        deserializer: @constructor.name
+        version: @constructor.version
+        relativePath: project.relativize(resolvedPath)
 
-  destroy: ->
-    @file?.off()
+    @file = new File(resolvedPath)
 
-  serialize: ->
-    deserializer: 'ArchiveEditSession'
-    path: @getUri()
+  destroy: -> @file?.off()
 
-  getViewClass: ->
-    require './archive-view'
+  serialize: -> @state.clone()
+
+  getState: -> @state
+
+  getViewClass: -> require './archive-view'
 
   getTitle: ->
     if archivePath = @getPath()
@@ -40,9 +53,11 @@ class ArchiveEditSession
     else
       'untitled'
 
-  getUri: -> project?.relativize(@getPath()) ? @getPath()
+  getUri: -> @getRelativePath()
 
-  getPath: -> @path
+  getRelativePath: -> @state.get('relativePath')
+
+  getPath: -> @file.getPath()
 
   isEqual: (other) ->
     other instanceof ArchiveEditSession and @getUri() is other.getUri()
