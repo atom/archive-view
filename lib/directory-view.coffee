@@ -4,12 +4,14 @@ FileView = require './file-view'
 module.exports =
 class DirectoryView extends View
   @content: (archivePath, entry) ->
-    @div class: 'entry', =>
-      @span entry.getName(), class: 'directory'
+    @li class: 'list-nested-item entry', =>
+      @span class: 'list-item', =>
+        @span entry.getName(), class: 'icon icon-file-directory'
+      @ol class: 'list-tree', outlet: 'entries'
 
   initialize: (archivePath, entry) ->
     for child in entry.children
       if child.isDirectory()
-        @append(new DirectoryView(archivePath, child))
+        @entries.append(new DirectoryView(archivePath, child))
       else
-        @append(new FileView(archivePath, child))
+        @entries.append(new FileView(archivePath, child))

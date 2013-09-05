@@ -8,11 +8,14 @@ archive = require 'ls-archive'
 module.exports =
 class FileView extends View
   @content: (archivePath, entry) ->
-    @div class: 'entry', tabindex: -1, =>
-      @span entry.getName(), class: 'file', outlet: 'name'
+    @li class: 'list-item entry', tabindex: -1, =>
+      @span entry.getName(), class: 'file icon', outlet: 'name'
 
   initialize: (@archivePath, @entry) ->
-    @name.addClass('symlink') if @entry.isSymbolicLink()
+    if @entry.isSymbolicLink()
+      @name.addClass('icon-file-symlink')
+    else
+      @name.addClass('icon-file-text')
 
     @on 'click', =>
       @select()
@@ -31,7 +34,7 @@ class FileView extends View
         files = @closest('.archive-view').find('.file')
         $(files[files.index(@name) - 1]).view()?.select()
 
-  isSelected: -> @name.hasClass('selected')
+  isSelected: -> @hasClass('selected')
 
   logError: (message, error) ->
     console.error(message, error.stack ? error)
@@ -54,5 +57,5 @@ class FileView extends View
 
   select: ->
     @closest('.archive-view').find('.selected').toggleClass('selected')
-    @name.addClass('selected')
+    @addClass('selected')
     @focus()

@@ -1,13 +1,8 @@
-@import "bootstrap/less/variables";
 @import "octicon-mixins";
+@import "ui-variables";
 
 .archive-view {
-  margin: 0;
-  padding: 0;
-  overflow: auto;
-  position: relative;
-  display: -webkit-flex;
-  @icon-margin: @line-height-base / 4;
+  background-color: @inset-panel-background-color;
 
   .archive-container {
     height:100%;
@@ -26,42 +21,16 @@
       }
     }
 
-    .tree {
-      padding: 0 5px 5px 5px;
+    .inset-panel {
+      border-width: 0;
+
+      .panel-heading {
+        border-radius: 0;
+      }
     }
 
-    .entry {
-      margin: 5px;
-
-      > .entry {
-        padding-left: 15px;
-      }
-
-      span.file {
-        display: inline-block;
-        padding: 5px;
-
-        &:before {
-          padding-right: @icon-margin;
-        }
-
-        .octicon(file-text);
-
-        &.symlink {
-          .octicon(file-symlink-file);
-        }
-      }
-
-      span.directory {
-        display: inline-block;
-        padding: 5px 0 0 5px;
-
-        &:before {
-          margin-right: @icon-margin;
-        }
-
-        .octicon(file-directory);
-      }
+    .archive-tree {
+      padding: 5px;
     }
   }
 }
