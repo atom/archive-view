@@ -6,7 +6,7 @@ class DirectoryView extends View
   @content: (archivePath, entry) ->
     @li class: 'list-nested-item entry', =>
       @span class: 'list-item', =>
-        @span entry.getName(), class: 'icon icon-file-directory'
+        @span entry.getName(), class: 'directory icon icon-file-directory'
       @ol class: 'list-tree', outlet: 'entries'
 
   initialize: (archivePath, entry) ->
