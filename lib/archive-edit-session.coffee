@@ -1,6 +1,5 @@
 path = require 'path'
 
-_ = require 'underscore'
 archive = require 'ls-archive'
 telepath = require 'telepath'
 
