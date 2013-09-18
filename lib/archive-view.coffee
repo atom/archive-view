@@ -1,9 +1,9 @@
-ScrollView = require 'scroll-view'
+{fs, ScrollView} = require 'atom-api'
+humanize = require 'humanize-plus'
 archive = require 'ls-archive'
+
 FileView = require './file-view'
 DirectoryView = require './directory-view'
-fs = require 'fs'
-humanize = require 'humanize-plus'
 
 module.exports =
 class ArchiveView extends ScrollView

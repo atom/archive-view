@@ -1,5 +1,4 @@
-RootView = require 'root-view'
-fsUtils = require 'fs-utils'
+{fs, RootView} = require 'atom-api'
 
 describe "Archive viewer", ->
   beforeEach ->

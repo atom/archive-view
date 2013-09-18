@@ -3,8 +3,7 @@ path = require 'path'
 archive = require 'ls-archive'
 telepath = require 'telepath'
 
-fsUtils = require 'fs-utils'
-File = require 'file'
+{File, fs} = require 'atom-api'
 
 module.exports=
 class ArchiveEditSession
@@ -13,8 +12,7 @@ class ArchiveEditSession
   @version: 1
 
   @activate: ->
-    Project = require 'project'
-    Project.registerOpener (filePath) ->
+    project.registerOpener (filePath) ->
       new ArchiveEditSession(path: filePath) if archive.isPathSupported(filePath)
 
   @deserialize: (state) ->

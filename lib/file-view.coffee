@@ -1,6 +1,4 @@
-{View} = require 'space-pen'
-$ = require 'jquery'
-fsUtils = require 'fs-utils'
+{$, fs, View} = require 'atom-api'
 path = require 'path'
 temp = require 'temp'
 archive = require 'ls-archive'
@@ -49,7 +47,7 @@ class FileView extends View
             @logError("Error creating temp directory: #{tempDirPath}", error)
           else
             tempFilePath = path.join(tempDirPath, path.basename(@archivePath), @entry.getName())
-            fsUtils.write tempFilePath, contents, (error) =>
+            fs.write tempFilePath, contents, (error) =>
               if error?
                 @logError("Error writing to #{tempFilePath}", error)
               else
