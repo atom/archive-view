@@ -1,4 +1,4 @@
-{View} = require 'atom-api'
+{View} = require 'atom'
 FileView = require './file-view'
 
 module.exports =

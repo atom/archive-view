@@ -1,4 +1,4 @@
-{fs, ScrollView} = require 'atom-api'
+{fs, ScrollView} = require 'atom'
 humanize = require 'humanize-plus'
 archive = require 'ls-archive'
 

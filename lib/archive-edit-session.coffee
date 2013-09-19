@@ -3,7 +3,7 @@ path = require 'path'
 archive = require 'ls-archive'
 telepath = require 'telepath'
 
-{File, fs} = require 'atom-api'
+{File, fs} = require 'atom'
 
 module.exports=
 class ArchiveEditSession
