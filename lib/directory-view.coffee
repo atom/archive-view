@@ -1,4 +1,4 @@
-{View} = require 'space-pen'
+{View} = require 'atom'
 FileView = require './file-view'
 
 module.exports =
