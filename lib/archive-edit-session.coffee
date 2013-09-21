@@ -1,9 +1,6 @@
 path = require 'path'
-
 archive = require 'ls-archive'
-telepath = require 'telepath'
-
-{File, fs} = require 'atom'
+{Document, File, fs} = require 'atom'
 
 module.exports=
 class ArchiveEditSession
@@ -24,7 +21,7 @@ class ArchiveEditSession
       console.warn "Could not build archive edit session for path '#{relativePath}' because that file no longer exists"
 
   constructor: (optionsOrState) ->
-    if optionsOrState instanceof telepath.Document
+    if optionsOrState instanceof Document
       @state = optionsOrState
       resolvedPath = project.resolve(@getRelativePath())
     else
