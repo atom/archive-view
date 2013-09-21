@@ -18,7 +18,7 @@ class ArchiveEditSession
   @deserialize: (state) ->
     relativePath = state.get('relativePath')
     resolvedPath = project.resolve(relativePath) if relativePath
-    if fsUtils.isFileSync(resolvedPath)
+    if fs.isFileSync(resolvedPath)
       new ArchiveEditSession(state)
     else
       console.warn "Could not build archive edit session for path '#{relativePath}' because that file no longer exists"
