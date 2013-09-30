@@ -5,7 +5,8 @@
   "main": "./lib/archive-edit-session",
   "dependencies": {
     "ls-archive": "~0.9.0",
-    "humanize-plus": "~1.4.2"
+    "humanize-plus": "~1.4.2",
+    "temp": "~0.6.0"
   },
   "repository": {
     "type": "git",
