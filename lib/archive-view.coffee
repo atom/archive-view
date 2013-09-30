@@ -10,7 +10,7 @@ class ArchiveView extends ScrollView
   @content: ->
     @div class: 'archive-view', tabindex: -1, =>
       @div class: 'archive-container', =>
-        @div outlet: 'loadingMessage', class: 'loading-message', 'Loading archive\u2026'
+        @div outlet: 'loadingMessage', class: 'loading-message text-info', 'Loading archive\u2026'
         @div class: 'inset-panel', =>
           @div outlet: 'summary', class: 'panel-heading'
           @ol outlet: 'tree', class: 'archive-tree padded list-tree has-collapsable-children'
