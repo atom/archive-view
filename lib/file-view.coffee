@@ -51,7 +51,7 @@ class FileView extends View
               if error?
                 @logError("Error writing to #{tempFilePath}", error)
               else
-                rootView.open(tempFilePath)
+                rootView.openAsync(tempFilePath)
 
   select: ->
     @closest('.archive-view').find('.selected').toggleClass('selected')

@@ -5,10 +5,11 @@ describe "Archive viewer", ->
     window.rootView = new RootView
     atom.activatePackage('archive-view', sync: true)
 
+    waitsForPromise ->
+      rootView.openAsync('nested.tar')
+
   describe ".initialize()", ->
     it "displays the files and folders in the archive file", ->
-      rootView.open('nested.tar')
-
       archiveView = rootView.find('.archive-view')
       expect(rootView.find('.archive-view')).toExist()
 
@@ -29,16 +30,12 @@ describe "Archive viewer", ->
         expect(archiveView.find('.file:eq(2)').text()).toBe 'fa.txt'
 
     it "selects the first file", ->
-      rootView.open('nested.tar')
-
       archiveView = rootView.find('.archive-view')
       waitsFor -> archiveView.find('.entry').length > 0
       runs -> expect(archiveView.find('.selected').text()).toBe 'f1.txt'
 
   describe "when core:move-up/core:move-down is triggered", ->
     it "selects the next/previous file", ->
-      rootView.open('nested.tar')
-
       archiveView = rootView.find('.archive-view')
 
       waitsFor -> archiveView.find('.entry').length > 0
@@ -59,40 +56,40 @@ describe "Archive viewer", ->
 
   describe "when a file is clicked", ->
     it "copies the contents to a temp file and opens it in a new editor", ->
-      rootView.open('nested.tar')
-
       archiveView = rootView.find('.archive-view')
 
-      waitsFor -> archiveView.find('.entry').length > 0
+      waitsFor ->
+        archiveView.find('.entry').length > 0
 
       runs ->
-        spyOn(rootView, 'open').andCallThrough()
         archiveView.find('.file:eq(2)').trigger 'click'
-        waitsFor -> rootView.open.callCount is 1
-        runs ->
-          expect(rootView.getActiveView().getText()).toBe 'hey there\n'
-          expect(rootView.getActivePaneItem().getTitle()).toBe 'fa.txt'
+
+      waitsFor ->
+        rootView.getActivePane().getItems().length > 1
+
+      runs ->
+        expect(rootView.getActiveView().getText()).toBe 'hey there\n'
+        expect(rootView.getActivePaneItem().getTitle()).toBe 'fa.txt'
 
   describe "when core:confirm is triggered", ->
     it "copies the contents to a temp file and opens it in a new editor", ->
-      rootView.open('nested.tar')
-
       archiveView = rootView.find('.archive-view')
 
-      waitsFor -> archiveView.find('.entry').length > 0
+      waitsFor ->
+        archiveView.find('.entry').length > 0
 
       runs ->
-        spyOn(rootView, 'open').andCallThrough()
         archiveView.find('.file:eq(0)').trigger 'core:confirm'
-        waitsFor -> rootView.open.callCount is 1
-        runs ->
-          expect(rootView.getActiveView().getText()).toBe ''
-          expect(rootView.getActivePaneItem().getTitle()).toBe 'f1.txt'
+
+      waitsFor ->
+        rootView.getActivePane().getItems().length > 1
+
+      runs ->
+        expect(rootView.getActiveView().getText()).toBe ''
+        expect(rootView.getActivePaneItem().getTitle()).toBe 'f1.txt'
 
   describe "when the file is removed", ->
     it "destroys the view", ->
-      rootView.open('nested.tar')
-
       archiveView = rootView.find('.archive-view')
 
       waitsFor -> archiveView.find('.entry').length > 0
@@ -104,8 +101,6 @@ describe "Archive viewer", ->
 
   describe "when the file is modified", ->
     it "refreshes the view", ->
-      rootView.open('nested.tar')
-
       archiveView = rootView.find('.archive-view').view()
 
       waitsFor -> archiveView.find('.entry').length > 0
