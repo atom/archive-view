@@ -11,7 +11,7 @@ class FileView extends View
 
   initialize: (@archivePath, @entry) ->
     if @entry.isSymbolicLink()
-      @name.addClass('icon-file-symlink')
+      @name.addClass('icon-file-symlink-file')
     else
       @name.addClass('icon-file-text')
 
