@@ -6,7 +6,7 @@ describe "Archive viewer", ->
     atom.activatePackage('archive-view', sync: true)
 
     waitsForPromise ->
-      rootView.openAsync('nested.tar')
+      rootView.open('nested.tar')
 
   describe ".initialize()", ->
     it "displays the files and folders in the archive file", ->
