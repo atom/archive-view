@@ -5,16 +5,16 @@ archive = require 'ls-archive'
 module.exports=
 class ArchiveEditSession
   @acceptsDocuments: true
-  registerDeserializer(this)
+  atom.deserializers.add(this)
   @version: 1
 
   @activate: ->
-    project.registerOpener (filePath) ->
+    atom.project.registerOpener (filePath) ->
       new ArchiveEditSession(path: filePath) if archive.isPathSupported(filePath)
 
   @deserialize: (state) ->
     relativePath = state.get('relativePath')
-    resolvedPath = project.resolve(relativePath) if relativePath
+    resolvedPath = atom.project.resolve(relativePath) if relativePath
     if fs.isFileSync(resolvedPath)
       new ArchiveEditSession(state)
     else
@@ -23,13 +23,13 @@ class ArchiveEditSession
   constructor: (optionsOrState) ->
     if optionsOrState instanceof Document
       @state = optionsOrState
-      resolvedPath = project.resolve(@getRelativePath())
+      resolvedPath = atom.project.resolve(@getRelativePath())
     else
       resolvedPath = optionsOrState.path
-      @state = site.createDocument
+      @state = atom.site.createDocument
         deserializer: @constructor.name
         version: @constructor.version
-        relativePath: project.relativize(resolvedPath)
+        relativePath: atom.project.relativize(resolvedPath)
 
     @file = new File(resolvedPath)
 
