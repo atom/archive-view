@@ -96,7 +96,7 @@ describe "Archive viewer", ->
 
       runs ->
         expect(rootView.getActivePane().getItems().length).toBe 1
-        rootView.getActivePaneItem().file.trigger('removed')
+        rootView.getActivePaneItem().file.emit('removed')
         expect(rootView.getActivePane()).toBeFalsy()
 
   describe "when the file is modified", ->
@@ -107,5 +107,5 @@ describe "Archive viewer", ->
 
       runs ->
         spyOn(archiveView, 'refresh')
-        rootView.getActivePaneItem().file.trigger('contents-changed')
+        rootView.getActivePaneItem().file.emit('contents-changed')
         expect(archiveView.refresh).toHaveBeenCalled()
