@@ -64,7 +64,7 @@ class ArchiveView extends ScrollView
     directoryCount = @tree.find('.directory').length
     directoryLabel = if directoryCount is 1 then "1 folder" else "#{humanize.intComma(directoryCount)} folders"
 
-    @summary.text("#{humanize.fileSize(fs.statSync(@path).size)} with #{fileLabel} and #{directoryLabel}").show()
+    @summary.text("#{humanize.fileSize(fs.getSizeSync(@path))} with #{fileLabel} and #{directoryLabel}").show()
 
   focusSelectedFile: ->
     @tree.find('.selected').view()?.focus()

@@ -47,7 +47,7 @@ class FileView extends View
             @logError("Error creating temp directory: #{tempDirPath}", error)
           else
             tempFilePath = path.join(tempDirPath, path.basename(@archivePath), @entry.getName())
-            fs.write tempFilePath, contents, (error) =>
+            fs.writeFile tempFilePath, contents, (error) =>
               if error?
                 @logError("Error writing to #{tempFilePath}", error)
               else
