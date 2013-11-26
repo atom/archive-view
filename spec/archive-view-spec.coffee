@@ -1,17 +1,17 @@
-{fs, RootView} = require 'atom'
+{fs, WorkspaceView} = require 'atom'
 
 describe "Archive viewer", ->
   archiveView = null
 
   beforeEach ->
-    atom.rootView = new RootView
+    atom.workspaceView = new WorkspaceView
     atom.packages.activatePackage('archive-view', sync: true)
 
     waitsForPromise ->
-      atom.rootView.open('nested.tar')
+      atom.workspaceView.open('nested.tar')
 
     runs ->
-      archiveView = atom.rootView.find('.archive-view').view()
+      archiveView = atom.workspaceView.find('.archive-view').view()
 
   describe ".initialize()", ->
     it "displays the files and folders in the archive file", ->
@@ -64,11 +64,11 @@ describe "Archive viewer", ->
         archiveView.find('.file:eq(2)').trigger 'click'
 
       waitsFor ->
-        atom.rootView.getActivePane().getItems().length > 1
+        atom.workspaceView.getActivePane().getItems().length > 1
 
       runs ->
-        expect(atom.rootView.getActiveView().getText()).toBe 'hey there\n'
-        expect(atom.rootView.getActivePaneItem().getTitle()).toBe 'fa.txt'
+        expect(atom.workspaceView.getActiveView().getText()).toBe 'hey there\n'
+        expect(atom.workspaceView.getActivePaneItem().getTitle()).toBe 'fa.txt'
 
   describe "when core:confirm is triggered", ->
     it "copies the contents to a temp file and opens it in a new editor", ->
@@ -79,11 +79,11 @@ describe "Archive viewer", ->
         archiveView.find('.file:eq(0)').trigger 'core:confirm'
 
       waitsFor ->
-        atom.rootView.getActivePane().getItems().length > 1
+        atom.workspaceView.getActivePane().getItems().length > 1
 
       runs ->
-        expect(atom.rootView.getActiveView().getText()).toBe ''
-        expect(atom.rootView.getActivePaneItem().getTitle()).toBe 'f1.txt'
+        expect(atom.workspaceView.getActiveView().getText()).toBe ''
+        expect(atom.workspaceView.getActivePaneItem().getTitle()).toBe 'f1.txt'
 
   describe "when the file is removed", ->
     it "destroys the view", ->
@@ -91,9 +91,9 @@ describe "Archive viewer", ->
         archiveView.find('.entry').length > 0
 
       runs ->
-        expect(atom.rootView.getActivePane().getItems().length).toBe 1
-        atom.rootView.getActivePaneItem().file.emit('removed')
-        expect(atom.rootView.getActivePane()).toBeFalsy()
+        expect(atom.workspaceView.getActivePane().getItems().length).toBe 1
+        atom.workspaceView.getActivePaneItem().file.emit('removed')
+        expect(atom.workspaceView.getActivePane()).toBeFalsy()
 
   describe "when the file is modified", ->
     it "refreshes the view", ->
@@ -102,5 +102,5 @@ describe "Archive viewer", ->
 
       runs ->
         spyOn(archiveView, 'refresh')
-        atom.rootView.getActivePaneItem().file.emit('contents-changed')
+        atom.workspaceView.getActivePaneItem().file.emit('contents-changed')
         expect(archiveView.refresh).toHaveBeenCalled()
