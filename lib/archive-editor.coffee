@@ -3,20 +3,20 @@ archive = require 'ls-archive'
 {Document, File, fs} = require 'atom'
 
 module.exports=
-class ArchiveEditSession
+class ArchiveEditor
   @acceptsDocuments: true
   atom.deserializers.add(this)
   @version: 1
 
   @activate: ->
     atom.project.registerOpener (filePath) ->
-      new ArchiveEditSession(path: filePath) if archive.isPathSupported(filePath)
+      new ArchiveEditor(path: filePath) if archive.isPathSupported(filePath)
 
   @deserialize: (state) ->
     relativePath = state.get('relativePath')
     resolvedPath = atom.project.resolve(relativePath) if relativePath
     if fs.isFileSync(resolvedPath)
-      new ArchiveEditSession(state)
+      new ArchiveEditor(state)
     else
       console.warn "Could not build archive edit session for path '#{relativePath}' because that file no longer exists"
 
@@ -39,7 +39,7 @@ class ArchiveEditSession
 
   getState: -> @state
 
-  getViewClass: -> require './archive-view'
+  getViewClass: -> require './archive-editor-view'
 
   getTitle: ->
     if archivePath = @getPath()
@@ -54,4 +54,4 @@ class ArchiveEditSession
   getPath: -> @file.getPath()
 
   isEqual: (other) ->
-    other instanceof ArchiveEditSession and @getUri() is other.getUri()
+    other instanceof ArchiveEditor and @getUri() is other.getUri()

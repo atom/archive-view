@@ -24,12 +24,12 @@ class FileView extends View
 
     @on 'core:move-down', =>
       if @isSelected()
-        files = @closest('.archive-view').find('.file')
+        files = @closest('.archive-editor').find('.file')
         $(files[files.index(@name) + 1]).view()?.select()
 
     @on 'core:move-up', =>
       if @isSelected()
-        files = @closest('.archive-view').find('.file')
+        files = @closest('.archive-editor').find('.file')
         $(files[files.index(@name) - 1]).view()?.select()
 
   isSelected: -> @hasClass('selected')
@@ -54,6 +54,6 @@ class FileView extends View
                 atom.workspaceView.open(tempFilePath)
 
   select: ->
-    @closest('.archive-view').find('.selected').toggleClass('selected')
+    @closest('.archive-editor').find('.selected').toggleClass('selected')
     @addClass('selected')
     @focus()

@@ -11,7 +11,7 @@ describe "Archive viewer", ->
       atom.workspaceView.open('nested.tar')
 
     runs ->
-      archiveView = atom.workspaceView.find('.archive-view').view()
+      archiveView = atom.workspaceView.find('.archive-editor').view()
 
   describe ".initialize()", ->
     it "displays the files and folders in the archive file", ->

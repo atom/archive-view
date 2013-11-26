@@ -6,19 +6,19 @@ FileView = require './file-view'
 DirectoryView = require './directory-view'
 
 module.exports =
-class ArchiveView extends ScrollView
+class ArchiveEditorView extends ScrollView
   @content: ->
-    @div class: 'archive-view', tabindex: -1, =>
+    @div class: 'archive-editor', tabindex: -1, =>
       @div class: 'archive-container', =>
         @div outlet: 'loadingMessage', class: 'loading-message text-info', 'Loading archive\u2026'
         @div class: 'inset-panel', =>
           @div outlet: 'summary', class: 'panel-heading'
           @ol outlet: 'tree', class: 'archive-tree padded list-tree has-collapsable-children'
 
-  initialize: (editSession) ->
+  initialize: (editor) ->
     super
 
-    @setModel(editSession)
+    @setModel(editor)
 
     @on 'focus', =>
       @focusSelectedFile()
@@ -72,12 +72,12 @@ class ArchiveView extends ScrollView
   focus: ->
     @focusSelectedFile()
 
-  setModel: (editSession) ->
-    @unsubscribe(@editSession) if @editSession
-    if editSession
-      @editSession = editSession
-      @setPath(editSession.getPath())
-      editSession.file.on 'contents-changed', =>
+  setModel: (editor) ->
+    @unsubscribe(@editor) if @editor
+    if editor
+      @editor = editor
+      @setPath(editor.getPath())
+      editor.file.on 'contents-changed', =>
         @refresh()
-      editSession.file.on 'removed', =>
-        @parent('.item-views').parent('.pane').view()?.destroyItem(editSession)
+      editor.file.on 'removed', =>
+        @parent('.item-views').parent('.pane').view()?.destroyItem(editor)

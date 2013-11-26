@@ -2,7 +2,7 @@
   "name": "archive-view",
   "version": "0.15.0",
   "description": "View the files and folders inside archive files",
-  "main": "./lib/archive-edit-session",
+  "main": "./lib/archive-editor",
   "dependencies": {
     "ls-archive": "~0.9.0",
     "humanize-plus": "~1.4.2",
