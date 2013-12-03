@@ -8,17 +8,8 @@
     "humanize-plus": "~1.4.2",
     "temp": "~0.6.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/atom/archive-view.git"
-  },
-  "bugs": {
-    "url": "https://github.com/atom/archive-view/issues"
-  },
+  "repository": "https://github.com/atom/archive-view",
   "engines": {
     "atom": "*"
-  },
-  "publishConfig": {
-    "registry": "https://atom.cloudant.com/registry/_design/app/_rewrite"
   }
 }
