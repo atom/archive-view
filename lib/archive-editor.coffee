@@ -1,57 +1,42 @@
 path = require 'path'
 archive = require 'ls-archive'
-{Document, File, fs} = require 'atom'
+{Model, File, fs} = require 'atom'
 
 module.exports=
-class ArchiveEditor
-  @acceptsDocuments: true
+class ArchiveEditor extends Model
   atom.deserializers.add(this)
-  @version: 1
 
   @activate: ->
     atom.project.registerOpener (filePath) ->
-      new ArchiveEditor(path: filePath) if archive.isPathSupported(filePath)
+      atom.create(new ArchiveEditor(path: filePath)) if archive.isPathSupported(filePath)
 
-  @deserialize: (state) ->
-    relativePath = state.get('relativePath')
-    resolvedPath = atom.project.resolve(relativePath) if relativePath
-    if fs.isFileSync(resolvedPath)
-      new ArchiveEditor(state)
-    else
-      console.warn "Could not build archive edit session for path '#{relativePath}' because that file no longer exists"
+  @properties
+    path: null
 
-  constructor: (optionsOrState) ->
-    if optionsOrState instanceof Document
-      @state = optionsOrState
-      resolvedPath = atom.project.resolve(@getRelativePath())
-    else
-      resolvedPath = optionsOrState.path
-      @state = atom.site.createDocument
-        deserializer: @constructor.name
-        version: @constructor.version
-        relativePath: atom.project.relativize(resolvedPath)
+  @behavior 'relativePath', ->
+    @$path.map (path) -> atom.project.relativize(path)
 
-    @file = new File(resolvedPath)
+  created: ->
+    unless fs.isFileSync(@path)
+      console.warn "Could not build archive editor for path '#{@path}' because that file no longer exists"
+      @destroy()
+    @file = new File(@path)
 
-  destroy: -> @file?.off()
+  destroyed: ->
+    @file?.off()
 
-  serialize: -> @state.clone()
-
-  getState: -> @state
+  # Deprecated: This can be removed once pane items are fully managed by telepath
+  serialize: -> this
 
   getViewClass: -> require './archive-editor-view'
 
   getTitle: ->
-    if archivePath = @getPath()
-      path.basename(archivePath)
+    if @path?
+      path.basename(@path)
     else
       'untitled'
 
-  getUri: -> @getRelativePath()
-
-  getRelativePath: -> @state.get('relativePath')
-
-  getPath: -> @file.getPath()
+  getUri: -> @relativePath
 
   isEqual: (other) ->
     other instanceof ArchiveEditor and @getUri() is other.getUri()
