@@ -1,42 +1,47 @@
-path = require 'path'
+{basename} = require 'path'
 archive = require 'ls-archive'
-{Model, File, fs} = require 'atom'
+Serializable = require 'serializable'
+{File, fs} = require 'atom'
 
 module.exports=
-class ArchiveEditor extends Model
+class ArchiveEditor extends Serializable
   atom.deserializers.add(this)
 
   @activate: ->
     atom.project.registerOpener (filePath) ->
-      atom.create(new ArchiveEditor(path: filePath)) if archive.isPathSupported(filePath)
+      new ArchiveEditor(path: filePath) if archive.isPathSupported(filePath)
 
-  @properties
-    path: null
+  constructor: ({path}) ->
+    @file = new File(path)
 
-  @behavior 'relativePath', ->
-    @$path.map (path) -> atom.project.relativize(path)
+  serializeParams: ->
+    path: @getPath()
 
-  created: ->
-    unless fs.isFileSync(@path)
-      console.warn "Could not build archive editor for path '#{@path}' because that file no longer exists"
-      @destroy()
-    @file = new File(@path)
+  deserializeParams: (params) ->
+    {path} = params
+    if fs.isFileSync(path)
+      params
+    else
+      console.warn "Could not build archive editor for path '#{path}' because that file no longer exists"
 
-  destroyed: ->
+  getPath: ->
+    @file.getPath()
+
+  getRelativePath: ->
+    atom.project.relativize(@getPath()) if @getPath()?
+
+  destroy: ->
     @file?.off()
-
-  # Deprecated: This can be removed once pane items are fully managed by telepath
-  serialize: -> this
 
   getViewClass: -> require './archive-editor-view'
 
   getTitle: ->
-    if @path?
-      path.basename(@path)
+    if @getPath()?
+      basename(@getPath())
     else
       'untitled'
 
-  getUri: -> @relativePath
+  getUri: -> @getRelativePath()
 
   isEqual: (other) ->
     other instanceof ArchiveEditor and @getUri() is other.getUri()

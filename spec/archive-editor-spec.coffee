@@ -1,8 +1,12 @@
+path = require 'path'
 {Document} = require 'atom'
 ArchiveEditor = require '../lib/archive-editor'
 
 describe "ArchiveEditor", ->
-  it "destroys itself upon creation if no file exists at the given path", ->
-    doc = Document.create()
-    doc.set('archiveEditor', new ArchiveEditor(path: "bogus"))
-    expect(doc.has('imageEditor')).toBe false
+  describe ".deserialize", ->
+    it "returns undefined if no file exists at the given path", ->
+      editor = new ArchiveEditor(path: path.join(__dirname, 'fixtures', 'nested.tar'))
+      state = editor.serialize()
+      expect(ArchiveEditor.deserialize(state)).toBeDefined()
+      state.path = 'bogus'
+      expect(ArchiveEditor.deserialize(state)).toBeUndefined()
