@@ -76,7 +76,7 @@ class ArchiveEditorView extends ScrollView
     @unsubscribe(@editor) if @editor
     if editor
       @editor = editor
-      @setPath(editor.path)
+      @setPath(editor.getPath())
       editor.file.on 'contents-changed', =>
         @refresh()
       editor.file.on 'removed', =>
