@@ -93,7 +93,7 @@ describe "Archive viewer", ->
       runs ->
         expect(atom.workspaceView.getActivePane().getItems().length).toBe 1
         atom.workspaceView.getActivePaneItem().file.emit('removed')
-        expect(atom.workspaceView.getActivePane()).toBeFalsy()
+        expect(atom.workspaceView.getActivePaneItem()).toBeUndefined()
 
   describe "when the file is modified", ->
     it "refreshes the view", ->
