@@ -7,7 +7,7 @@ describe "Archive viewer", ->
     atom.workspaceView = new WorkspaceView
 
     waitsForPromise ->
-      atom.packages.activatePackage('archive-view', sync: true)
+      atom.packages.activatePackage('archive-view')
 
     waitsForPromise ->
       atom.workspaceView.open('nested.tar')
