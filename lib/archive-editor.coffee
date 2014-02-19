@@ -27,9 +27,6 @@ class ArchiveEditor extends Serializable
   getPath: ->
     @file.getPath()
 
-  getRelativePath: ->
-    atom.project.relativize(@getPath()) if @getPath()?
-
   destroy: ->
     @file?.off()
 
@@ -41,7 +38,7 @@ class ArchiveEditor extends Serializable
     else
       'untitled'
 
-  getUri: -> @getRelativePath()
+  getUri: -> @getPath()
 
   isEqual: (other) ->
     other instanceof ArchiveEditor and @getUri() is other.getUri()
