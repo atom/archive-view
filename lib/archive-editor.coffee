@@ -1,4 +1,4 @@
-{basename} = require 'path'
+path = require 'path'
 archive = require 'ls-archive'
 {File} = require 'pathwatcher'
 fs = require 'fs-plus'
@@ -18,12 +18,11 @@ class ArchiveEditor extends Serializable
   serializeParams: ->
     path: @getPath()
 
-  deserializeParams: (params) ->
-    {path} = params
-    if fs.isFileSync(path)
+  deserializeParams: (params={}) ->
+    if fs.isFileSync(params.path)
       params
     else
-      console.warn "Could not build archive editor for path '#{path}' because that file no longer exists"
+      console.warn "Could not build archive editor for path '#{params.path}' because that file no longer exists"
 
   getPath: ->
     @file.getPath()
@@ -38,7 +37,7 @@ class ArchiveEditor extends Serializable
 
   getTitle: ->
     if @getPath()?
-      basename(@getPath())
+      path.basename(@getPath())
     else
       'untitled'
 
