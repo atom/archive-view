@@ -7,7 +7,8 @@
     "ls-archive": "~0.9.0",
     "humanize-plus": "~1.4.2",
     "temp": "~0.6.0",
-    "serializable": "1.x"
+    "serializable": "1.x",
+    "pathwatcher": "0.16.0"
   },
   "repository": "https://github.com/atom/archive-view",
   "engines": {
