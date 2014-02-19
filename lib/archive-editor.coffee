@@ -1,8 +1,8 @@
 {basename} = require 'path'
 archive = require 'ls-archive'
 {File} = require 'pathwatcher'
+fs = require 'fs-plus'
 Serializable = require 'serializable'
-{fs} = require 'atom'
 
 module.exports=
 class ArchiveEditor extends Serializable
