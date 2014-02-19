@@ -5,6 +5,7 @@ describe "Archive viewer", ->
 
   beforeEach ->
     atom.workspaceView = new WorkspaceView
+    atom.workspace = atom.workspaceView.model
 
     waitsForPromise ->
       atom.packages.activatePackage('archive-view')

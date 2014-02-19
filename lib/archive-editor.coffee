@@ -1,4 +1,6 @@
 path = require 'path'
+url = require 'url'
+
 archive = require 'ls-archive'
 {File} = require 'pathwatcher'
 fs = require 'fs-plus'
@@ -9,8 +11,10 @@ class ArchiveEditor extends Serializable
   atom.deserializers.add(this)
 
   @activate: ->
-    atom.project.registerOpener (filePath) ->
-      new ArchiveEditor(path: filePath) if archive.isPathSupported(filePath)
+    atom.workspace.registerOpener (filePath='') ->
+      # Don't open URIs with a protocol such as http:
+      if not url.parse(filePath).protocol and archive.isPathSupported(filePath)
+        new ArchiveEditor(path: filePath)
 
   constructor: ({path}) ->
     @file = new File(path)
