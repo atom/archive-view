@@ -1,5 +1,6 @@
-{$, fs, View} = require 'atom'
 path = require 'path'
+{$, View} = require 'atom'
+fs = require 'fs-plus'
 temp = require 'temp'
 archive = require 'ls-archive'
 

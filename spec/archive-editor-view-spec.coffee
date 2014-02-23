@@ -1,4 +1,5 @@
-{fs, WorkspaceView} = require 'atom'
+fs = require 'fs-plus'
+{WorkspaceView} = require 'atom'
 
 describe "Archive viewer", ->
   archiveView = null

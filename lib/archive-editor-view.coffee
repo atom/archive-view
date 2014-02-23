@@ -1,4 +1,5 @@
-{fs, ScrollView} = require 'atom'
+{ScrollView} = require 'atom'
+fs = require 'fs-plus'
 humanize = require 'humanize-plus'
 archive = require 'ls-archive'
 
