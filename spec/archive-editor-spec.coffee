@@ -1,5 +1,4 @@
 path = require 'path'
-{Document} = require 'atom'
 ArchiveEditor = require '../lib/archive-editor'
 
 describe "ArchiveEditor", ->
