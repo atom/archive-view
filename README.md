@@ -2,6 +2,7 @@
 
 Adds support for browsing archive files in Atom with the following extensions:
 
+  * `.epub`
   * `.jar`
   * `.tar`
   * `.tar.gz`
