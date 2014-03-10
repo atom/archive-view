@@ -1,7 +1,8 @@
 path = require 'path'
 url = require 'url'
 
-archive = require 'ls-archive'
+{allowUnsafeNewFunction} = require 'loophole'
+archive = allowUnsafeNewFunction -> require 'ls-archive'
 {File} = require 'pathwatcher'
 fs = require 'fs-plus'
 Serializable = require 'serializable'
