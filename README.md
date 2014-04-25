@@ -1,4 +1,4 @@
-# Archive view package
+# Archive view package [![Build Status](https://travis-ci.org/atom/archive-view.svg?branch=master)](https://travis-ci.org/atom/archive-view)
 
 Adds support for browsing archive files in Atom with the following extensions:
 
