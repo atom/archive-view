@@ -2,12 +2,13 @@
 
 Adds support for browsing archive files in Atom with the following extensions:
 
-  * `.epub`
-  * `.jar`
-  * `.tar`
-  * `.tar.gz`
-  * `.tgz`
-  * `.zip`
+  * .epub
+  * .jar
+  * .tar
+  * .tar.gz
+  * .tgz
+  * .war
+  * .zip
 
 Select a file to extract it to a temp file and open it in a new editor.
 

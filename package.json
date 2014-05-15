@@ -5,7 +5,7 @@
   "main": "./lib/archive-editor",
   "dependencies": {
     "loophole": "^0.3.0",
-    "ls-archive": "~0.13.0",
+    "ls-archive": "^1",
     "humanize-plus": "~1.4.2",
     "temp": "~0.6.0",
     "serializable": "1.x",
