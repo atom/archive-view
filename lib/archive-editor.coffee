@@ -1,5 +1,4 @@
 path = require 'path'
-url = require 'url'
 
 {allowUnsafeNewFunction} = require 'loophole'
 archive = allowUnsafeNewFunction -> require 'ls-archive'
@@ -13,8 +12,9 @@ class ArchiveEditor extends Serializable
 
   @activate: ->
     atom.workspace.registerOpener (filePath='') ->
-      # Don't open URIs with a protocol such as http:
-      if not url.parse(filePath).protocol and archive.isPathSupported(filePath)
+      # Check that the file path exists before opening in case something like
+      # an http: URI is being opened.
+      if archive.isPathSupported(filePath) and fs.isFileSync(filePath)
         new ArchiveEditor(path: filePath)
 
   constructor: ({path}) ->
