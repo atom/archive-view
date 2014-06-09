@@ -1,5 +1,4 @@
 path = require 'path'
-url = require 'url'
 
 {allowUnsafeNewFunction} = require 'loophole'
 archive = allowUnsafeNewFunction -> require 'ls-archive'
