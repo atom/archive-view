@@ -68,11 +68,11 @@ describe "Archive viewer", ->
         archiveView.find('.file:eq(2)').trigger 'click'
 
       waitsFor ->
-        atom.workspaceView.getActivePane().getItems().length > 1
+        atom.workspace.getActivePane().getItems().length > 1
 
       runs ->
         expect(atom.workspaceView.getActiveView().getText()).toBe 'hey there\n'
-        expect(atom.workspaceView.getActivePaneItem().getTitle()).toBe 'fa.txt'
+        expect(atom.workspace.getActivePaneItem().getTitle()).toBe 'fa.txt'
 
   describe "when core:confirm is triggered", ->
     it "copies the contents to a temp file and opens it in a new editor", ->
@@ -83,11 +83,11 @@ describe "Archive viewer", ->
         archiveView.find('.file:eq(0)').trigger 'core:confirm'
 
       waitsFor ->
-        atom.workspaceView.getActivePane().getItems().length > 1
+        atom.workspace.getActivePane().getItems().length > 1
 
       runs ->
         expect(atom.workspaceView.getActiveView().getText()).toBe ''
-        expect(atom.workspaceView.getActivePaneItem().getTitle()).toBe 'f1.txt'
+        expect(atom.workspace.getActivePaneItem().getTitle()).toBe 'f1.txt'
 
   describe "when the file is removed", ->
     it "destroys the view", ->
@@ -95,9 +95,9 @@ describe "Archive viewer", ->
         archiveView.find('.entry').length > 0
 
       runs ->
-        expect(atom.workspaceView.getActivePane().getItems().length).toBe 1
-        atom.workspaceView.getActivePaneItem().file.emit('removed')
-        expect(atom.workspaceView.getActivePaneItem()).toBeUndefined()
+        expect(atom.workspace.getActivePane().getItems().length).toBe 1
+        atom.workspace.getActivePaneItem().file.emit('removed')
+        expect(atom.workspace.getActivePaneItem()).toBeUndefined()
 
   describe "when the file is modified", ->
     it "refreshes the view", ->
@@ -106,5 +106,5 @@ describe "Archive viewer", ->
 
       runs ->
         spyOn(archiveView, 'refresh')
-        atom.workspaceView.getActivePaneItem().file.emit('contents-changed')
+        atom.workspace.getActivePaneItem().file.emit('contents-changed')
         expect(archiveView.refresh).toHaveBeenCalled()
