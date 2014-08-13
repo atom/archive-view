@@ -15,7 +15,7 @@ describe "Archive viewer", ->
       atom.workspaceView.open('nested.tar')
 
     runs ->
-      archiveView = atom.workspaceView.find('.archive-editor').view()
+      archiveView = atom.workspaceView.getActiveView()
 
   describe ".initialize()", ->
     it "displays the files and folders in the archive file", ->
@@ -108,3 +108,19 @@ describe "Archive viewer", ->
         spyOn(archiveView, 'refresh')
         atom.workspace.getActivePaneItem().file.emit('contents-changed')
         expect(archiveView.refresh).toHaveBeenCalled()
+
+  describe "when the file is invalid", ->
+    beforeEach ->
+      waitsForPromise ->
+        atom.workspaceView.open('invalid.zip')
+
+      runs ->
+        archiveView = atom.workspaceView.getActiveView()
+        atom.workspaceView.attachToDom()
+
+    it "shows the error", ->
+      waitsFor ->
+        archiveView.errorMessage.isVisible()
+
+      runs ->
+        expect(archiveView.errorMessage.text().length).toBeGreaterThan 0

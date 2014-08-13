@@ -12,6 +12,7 @@ class ArchiveEditorView extends ScrollView
     @div class: 'archive-editor', tabindex: -1, =>
       @div class: 'archive-container', =>
         @div outlet: 'loadingMessage', class: 'padded icon icon-hourglass text-info', 'Loading archive\u2026'
+        @div outlet: 'errorMessage', class: 'padded icon icon-alert text-error'
         @div class: 'inset-panel', =>
           @div outlet: 'summary', class: 'panel-heading'
           @ol outlet: 'tree', class: 'archive-tree padded list-tree has-collapsable-children'
@@ -34,15 +35,18 @@ class ArchiveEditorView extends ScrollView
     @summary.hide()
     @tree.hide()
     @loadingMessage.show()
+    @errorMessage.hide()
 
     originalPath = @path
     archive.list @path, tree: true, (error, entries) =>
       return unless originalPath is @path
 
+      @loadingMessage.hide()
       if error?
-        console.error("Error listing archive file: #{@path}", error.stack ? error)
+        message = 'Reading the archive file failed'
+        message += ": #{error.message}" if error.message
+        @errorMessage.show().text(message)
       else
-        @loadingMessage.hide()
         @createTreeEntries(entries)
         @updateSummary()
 
