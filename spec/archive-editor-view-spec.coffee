@@ -1,14 +1,11 @@
 fs = require 'fs-plus'
-{WorkspaceView} = require 'atom'
 {File} = require 'pathwatcher'
+{$} = require 'atom-space-pen-views'
 
 describe "Archive viewer", ->
   [archiveView, onDidDeleteCallback, onDidChangeCallback] = []
 
   beforeEach ->
-    atom.workspaceView = new WorkspaceView
-    atom.workspace = atom.workspaceView.model
-
     spyOn(File::, 'onDidDelete').andCallFake (callback) -> onDidDeleteCallback = callback
     spyOn(File::, 'onDidChange').andCallFake (callback) -> onDidChangeCallback = callback
 
@@ -16,10 +13,10 @@ describe "Archive viewer", ->
       atom.packages.activatePackage('archive-view')
 
     waitsForPromise ->
-      atom.workspaceView.open('nested.tar')
+      atom.workspace.open('nested.tar')
 
     runs ->
-      archiveView = atom.workspaceView.getActiveView()
+      archiveView = $(atom.views.getView(atom.workspace.getActivePaneItem())).view()
 
   describe ".initialize()", ->
     it "displays the files and folders in the archive file", ->
@@ -75,7 +72,7 @@ describe "Archive viewer", ->
         atom.workspace.getActivePane().getItems().length > 1
 
       runs ->
-        expect(atom.workspaceView.getActiveView().getText()).toBe 'hey there\n'
+        expect(atom.workspace.getActivePaneItem().getText()).toBe 'hey there\n'
         expect(atom.workspace.getActivePaneItem().getTitle()).toBe 'fa.txt'
 
   describe "when core:confirm is triggered", ->
@@ -90,7 +87,7 @@ describe "Archive viewer", ->
         atom.workspace.getActivePane().getItems().length > 1
 
       runs ->
-        expect(atom.workspaceView.getActiveView().getText()).toBe ''
+        expect(atom.workspace.getActivePaneItem().getText()).toBe ''
         expect(atom.workspace.getActivePaneItem().getTitle()).toBe 'f1.txt'
 
   describe "when the file is removed", ->
@@ -116,11 +113,11 @@ describe "Archive viewer", ->
   describe "when the file is invalid", ->
     beforeEach ->
       waitsForPromise ->
-        atom.workspaceView.open('invalid.zip')
+        atom.workspace.open('invalid.zip')
 
       runs ->
-        archiveView = atom.workspaceView.getActiveView()
-        atom.workspaceView.attachToDom()
+        archiveView = $(atom.views.getView(atom.workspace.getActivePaneItem())).view()
+        jasmine.attachToDOM(atom.views.getView(atom.workspace))
 
     it "shows the error", ->
       waitsFor ->

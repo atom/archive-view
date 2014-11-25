@@ -85,4 +85,4 @@ class ArchiveEditorView extends ScrollView
       editor.file.onDidChange =>
         @refresh()
       editor.file.onDidDelete =>
-        @parents('.pane').view()?.destroyItem(editor)
+        atom.workspace.paneForItem(@editor).destroyItem(@editor)
