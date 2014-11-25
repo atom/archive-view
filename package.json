@@ -4,7 +4,7 @@
   "description": "View the files and folders inside archive files",
   "main": "./lib/archive-editor",
   "dependencies": {
-    "atom-space-pen-views": "^0.17.0",
+    "atom-space-pen-views": "^0.18.0",
     "fs-plus": "^2",
     "humanize-plus": "~1.4.2",
     "loophole": "^0.3.0",
