@@ -1,5 +1,5 @@
 path = require 'path'
-{$, View} = require 'atom'
+{$, View} = require 'atom-space-pen-views'
 fs = require 'fs-plus'
 temp = require 'temp'
 archive = require 'ls-archive'
@@ -20,18 +20,19 @@ class FileView extends View
       @select()
       @openFile()
 
-    @on 'core:confirm', =>
-      @openFile() if @isSelected()
+    atom.commands.add @element,
+      'core:confirm': =>
+        @openFile() if @isSelected()
 
-    @on 'core:move-down', =>
-      if @isSelected()
-        files = @closest('.archive-editor').find('.file')
-        $(files[files.index(@name) + 1]).view()?.select()
+      'core:move-down': =>
+        if @isSelected()
+          files = @closest('.archive-editor').find('.file')
+          $(files[files.index(@name) + 1]).view()?.select()
 
-    @on 'core:move-up', =>
-      if @isSelected()
-        files = @closest('.archive-editor').find('.file')
-        $(files[files.index(@name) - 1]).view()?.select()
+      'core:move-up': =>
+        if @isSelected()
+          files = @closest('.archive-editor').find('.file')
+          $(files[files.index(@name) - 1]).view()?.select()
 
   isSelected: -> @hasClass('selected')
 
@@ -52,7 +53,7 @@ class FileView extends View
               if error?
                 @logError("Error writing to #{tempFilePath}", error)
               else
-                atom.workspaceView.open(tempFilePath)
+                atom.workspace.open(tempFilePath)
 
   select: ->
     @closest('.archive-editor').find('.selected').toggleClass('selected')

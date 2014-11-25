@@ -46,17 +46,17 @@ describe "Archive viewer", ->
       waitsFor -> archiveView.find('.entry').length > 0
 
       runs ->
-        archiveView.find('.selected').trigger 'core:move-up'
+        atom.commands.dispatch archiveView.find('.selected')[0], 'core:move-up'
         expect(archiveView.find('.selected').text()).toBe 'f1.txt'
-        archiveView.find('.selected').trigger 'core:move-down'
+        atom.commands.dispatch archiveView.find('.selected')[0], 'core:move-down'
         expect(archiveView.find('.selected').text()).toBe 'f2.txt'
-        archiveView.find('.selected').trigger 'core:move-down'
+        atom.commands.dispatch archiveView.find('.selected')[0], 'core:move-down'
         expect(archiveView.find('.selected').text()).toBe 'fa.txt'
-        archiveView.find('.selected').trigger 'core:move-down'
+        atom.commands.dispatch archiveView.find('.selected')[0], 'core:move-down'
         expect(archiveView.find('.selected').text()).toBe 'fa.txt'
-        archiveView.find('.selected').trigger 'core:move-up'
+        atom.commands.dispatch archiveView.find('.selected')[0], 'core:move-up'
         expect(archiveView.find('.selected').text()).toBe 'f2.txt'
-        archiveView.find('.selected').trigger 'core:move-up'
+        atom.commands.dispatch archiveView.find('.selected')[0], 'core:move-up'
         expect(archiveView.find('.selected').text()).toBe 'f1.txt'
 
   describe "when a file is clicked", ->
@@ -80,7 +80,7 @@ describe "Archive viewer", ->
         archiveView.find('.entry').length > 0
 
       runs ->
-        archiveView.find('.file:eq(0)').trigger 'core:confirm'
+        atom.commands.dispatch archiveView.find('.file:eq(0)')[0], 'core:confirm'
 
       waitsFor ->
         atom.workspace.getActivePane().getItems().length > 1
