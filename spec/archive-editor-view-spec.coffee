@@ -3,13 +3,14 @@ fs = require 'fs-plus'
 {File} = require 'pathwatcher'
 
 describe "Archive viewer", ->
-  [archiveView, onDidDeleteCallback] = []
+  [archiveView, onDidDeleteCallback, onDidChangeCallback] = []
 
   beforeEach ->
     atom.workspaceView = new WorkspaceView
     atom.workspace = atom.workspaceView.model
 
     spyOn(File::, 'onDidDelete').andCallFake (callback) -> onDidDeleteCallback = callback
+    spyOn(File::, 'onDidChange').andCallFake (callback) -> onDidChangeCallback = callback
 
     waitsForPromise ->
       atom.packages.activatePackage('archive-view')
@@ -109,7 +110,7 @@ describe "Archive viewer", ->
 
       runs ->
         spyOn(archiveView, 'refresh')
-        atom.workspace.getActivePaneItem().file.emit('contents-changed')
+        onDidChangeCallback()
         expect(archiveView.refresh).toHaveBeenCalled()
 
   describe "when the file is invalid", ->
