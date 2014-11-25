@@ -11,7 +11,7 @@ class ArchiveEditor extends Serializable
   atom.deserializers.add(this)
 
   @activate: ->
-    atom.workspace.registerOpener (filePath='') ->
+    atom.workspace.addOpener (filePath='') ->
       # Check that the file path exists before opening in case something like
       # an http: URI is being opened.
       if archive.isPathSupported(filePath) and fs.isFileSync(filePath)
