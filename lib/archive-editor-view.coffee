@@ -84,5 +84,5 @@ class ArchiveEditorView extends ScrollView
       @setPath(editor.getPath())
       editor.file.on 'contents-changed', =>
         @refresh()
-      editor.file.on 'removed', =>
+      editor.file.onDidDelete =>
         @parents('.pane').view()?.destroyItem(editor)
