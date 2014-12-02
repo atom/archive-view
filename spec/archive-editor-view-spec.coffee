@@ -8,11 +8,11 @@ describe "Archive viewer", ->
 
   beforeEach ->
     spyOn(File::, 'onDidDelete').andCallFake (callback) ->
-      onDidDeleteCallback = callback if @getPath().match /.tar/
+      onDidDeleteCallback = callback if @getPath().match /\.tar$/
       new Disposable
 
     spyOn(File::, 'onDidChange').andCallFake (callback) ->
-      onDidChangeCallback = callback if @getPath().match /.tar/
+      onDidChangeCallback = callback if @getPath().match /\.tar$/
       new Disposable
 
     waitsForPromise ->
