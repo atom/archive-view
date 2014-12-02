@@ -1,4 +1,4 @@
-{ScrollView} = require 'atom'
+{ScrollView} = require 'atom-space-pen-views'
 fs = require 'fs-plus'
 humanize = require 'humanize-plus'
 archive = require 'ls-archive'
@@ -82,7 +82,7 @@ class ArchiveEditorView extends ScrollView
     if editor
       @editor = editor
       @setPath(editor.getPath())
-      editor.file.on 'contents-changed', =>
+      editor.file.onDidChange =>
         @refresh()
-      editor.file.on 'removed', =>
-        @parents('.pane').view()?.destroyItem(editor)
+      editor.file.onDidDelete =>
+        atom.workspace.paneForItem(@editor).destroyItem(@editor)

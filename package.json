@@ -4,13 +4,14 @@
   "description": "View the files and folders inside archive files",
   "main": "./lib/archive-editor",
   "dependencies": {
+    "atom-space-pen-views": "^0.18.0",
+    "fs-plus": "^2",
+    "humanize-plus": "~1.4.2",
     "loophole": "^0.3.0",
     "ls-archive": "^1.0.2",
-    "humanize-plus": "~1.4.2",
-    "temp": "~0.6.0",
+    "pathwatcher": "^2.3.4",
     "serializable": "^1",
-    "pathwatcher": "^2.1.1",
-    "fs-plus": "^2"
+    "temp": "~0.6.0"
   },
   "repository": "https://github.com/atom/archive-view",
   "engines": {
