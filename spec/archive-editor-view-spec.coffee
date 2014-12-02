@@ -1,4 +1,5 @@
 fs = require 'fs-plus'
+{Disposable} = require 'atom'
 {File} = require 'pathwatcher'
 {$} = require 'atom-space-pen-views'
 
@@ -6,8 +7,13 @@ describe "Archive viewer", ->
   [archiveView, onDidDeleteCallback, onDidChangeCallback] = []
 
   beforeEach ->
-    spyOn(File::, 'onDidDelete').andCallFake (callback) -> onDidDeleteCallback = callback
-    spyOn(File::, 'onDidChange').andCallFake (callback) -> onDidChangeCallback = callback
+    spyOn(File::, 'onDidDelete').andCallFake (callback) ->
+      onDidDeleteCallback = callback if @getPath().match /.tar/
+      new Disposable
+
+    spyOn(File::, 'onDidChange').andCallFake (callback) ->
+      onDidChangeCallback = callback if @getPath().match /.tar/
+      new Disposable
 
     waitsForPromise ->
       atom.packages.activatePackage('archive-view')
