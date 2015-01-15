@@ -43,7 +43,7 @@ class ArchiveEditor extends Serializable
     else
       'untitled'
 
-  getUri: -> @getPath()
+  getURI: -> @getPath()
 
   isEqual: (other) ->
-    other instanceof ArchiveEditor and @getUri() is other.getUri()
+    other instanceof ArchiveEditor and @getURI() is other.getURI()
