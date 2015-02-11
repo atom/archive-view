@@ -7,7 +7,7 @@
     "atom-space-pen-views": "^2.0.0",
     "fs-plus": "^2",
     "humanize-plus": "~1.4.2",
-    "loophole": "^0.3.0",
+    "loophole": "^1",
     "ls-archive": "^1.0.3",
     "pathwatcher": "^3.0.0",
     "serializable": "^1",
