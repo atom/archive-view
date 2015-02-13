@@ -1,9 +1,17 @@
 path = require 'path'
 
-archive = require 'ls-archive'
 {File} = require 'pathwatcher'
 fs = require 'fs-plus'
 Serializable = require 'serializable'
+
+isPathSupported = (filePath) ->
+  switch path.extname(filePath)
+    when '.epub', '.jar', '.love', '.tar', '.tgz', '.war', '.zip'
+      return true
+    when '.gz'
+      return path.extname(path.basename(filePath, '.gz')) is '.tar'
+    else
+      return false
 
 module.exports=
 class ArchiveEditor extends Serializable
@@ -13,7 +21,7 @@ class ArchiveEditor extends Serializable
     atom.workspace.addOpener (filePath='') ->
       # Check that the file path exists before opening in case something like
       # an http: URI is being opened.
-      if archive.isPathSupported(filePath) and fs.isFileSync(filePath)
+      if isPathSupported(filePath) and fs.isFileSync(filePath)
         new ArchiveEditor(path: filePath)
 
   constructor: ({path}) ->
