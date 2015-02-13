@@ -18,7 +18,8 @@ class ArchiveEditorView extends ScrollView
           @ol outlet: 'tree', class: 'archive-tree padded list-tree has-collapsable-children'
 
   initialize: (editor) ->
-    super
+    commandDisposable = super()
+    commandDisposable.dispose()
 
     @setModel(editor)
 
