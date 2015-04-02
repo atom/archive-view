@@ -6,7 +6,7 @@ Serializable = require 'serializable'
 
 isPathSupported = (filePath) ->
   switch path.extname(filePath)
-    when '.epub', '.jar', '.love', '.tar', '.tgz', '.war', '.zip'
+    when '.egg', '.epub', '.jar', '.love', '.tar', '.tgz', '.war', '.whl', '.xpi', '.zip'
       return true
     when '.gz'
       return path.extname(path.basename(filePath, '.gz')) is '.tar'
