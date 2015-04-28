@@ -2,6 +2,7 @@
 fs = require 'fs-plus'
 humanize = require 'humanize-plus'
 archive = require 'ls-archive'
+{CompositeDisposable} = require 'atom'
 
 FileView = require './file-view'
 DirectoryView = require './directory-view'
@@ -79,11 +80,17 @@ class ArchiveEditorView extends ScrollView
     @focusSelectedFile()
 
   setModel: (editor) ->
-    @unsubscribe(@editor) if @editor
-    if editor
+    @editorSubscriptions?.dispose()
+    @editorSubscriptions = null
+
+    if editor?
+      @editorSubscriptions = new CompositeDisposable()
       @editor = editor
       @setPath(editor.getPath())
-      editor.file.onDidChange =>
+      @editorSubscriptions.add editor.file.onDidChange =>
         @refresh()
-      editor.file.onDidDelete =>
+      @editorSubscriptions.add editor.file.onDidDelete =>
         atom.workspace.paneForItem(@editor)?.destroyItem(@editor)
+      @editorSubscriptions.add editor.onDidDestroy =>
+        @editorSubscriptions?.dispose()
+        @editorSubscriptions = null
