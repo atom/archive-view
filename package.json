@@ -13,6 +13,7 @@
     "temp": "~0.8.1"
   },
   "repository": "https://github.com/atom/archive-view",
+  "license": "MIT",
   "engines": {
     "atom": "*"
   }
