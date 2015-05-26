@@ -16,5 +16,8 @@
   "license": "MIT",
   "engines": {
     "atom": "*"
+  },
+  "devDependencies": {
+    "coffeelint": "^1.9.7"
   }
 }
