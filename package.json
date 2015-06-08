@@ -7,7 +7,7 @@
     "atom-space-pen-views": "^2.0.0",
     "fs-plus": "^2",
     "humanize-plus": "~1.4.2",
-    "ls-archive": "^1.1",
+    "ls-archive": "^1.1.1",
     "pathwatcher": "^4.2",
     "serializable": "^1",
     "temp": "~0.8.1"
