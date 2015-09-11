@@ -1,6 +1,5 @@
 fs = require 'fs-plus'
-{Disposable} = require 'atom'
-{File} = require 'pathwatcher'
+{Disposable, File} = require 'atom'
 {$} = require 'atom-space-pen-views'
 
 describe "Archive viewer", ->

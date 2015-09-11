@@ -1,9 +1,8 @@
 path = require 'path'
 
-{File} = require 'pathwatcher'
 fs = require 'fs-plus'
 Serializable = require 'serializable'
-{Emitter} = require 'atom'
+{Emitter, File} = require 'atom'
 
 isPathSupported = (filePath) ->
   switch path.extname(filePath)

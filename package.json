@@ -8,7 +8,6 @@
     "fs-plus": "^2",
     "humanize-plus": "~1.4.2",
     "ls-archive": "^1.2.1",
-    "pathwatcher": "^4.2",
     "serializable": "^1",
     "temp": "~0.8.1"
   },
