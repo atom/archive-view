@@ -15,8 +15,6 @@ isPathSupported = (filePath) ->
 
 module.exports=
 class ArchiveEditor extends Serializable
-  atom.deserializers.add(this)
-
   @activate: ->
     atom.workspace.addOpener (filePath='') ->
       # Check that the file path exists before opening in case something like
@@ -58,3 +56,6 @@ class ArchiveEditor extends Serializable
 
   isEqual: (other) ->
     other instanceof ArchiveEditor and @getURI() is other.getURI()
+
+if parseFloat(atom.getVersion()) < 1.7
+  atom.deserializers.add(ArchiveEditor)
