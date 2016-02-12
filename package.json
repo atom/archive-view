@@ -16,6 +16,9 @@
   "engines": {
     "atom": "*"
   },
+  "deserializers": {
+    "ArchiveEditor": "deserialize"
+  },
   "devDependencies": {
     "coffeelint": "^1.9.7"
   }
