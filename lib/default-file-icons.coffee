@@ -2,10 +2,10 @@ fs = require 'fs-plus'
 path = require 'path'
 
 class DefaultFileIcons
-  iconClassForPath: (filePath, entry) ->
+  iconClassForPath: (filePath) ->
     extension = path.extname(filePath)
 
-    if entry.isSymbolicLink()
+    if fs.isSymbolicLinkSync(filePath)
       'icon-file-symlink-file'
     else if fs.isReadmePath(filePath)
       'icon-book'

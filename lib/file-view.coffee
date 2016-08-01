@@ -13,7 +13,7 @@ class FileView extends View
       @span entry.getName(), class: 'file icon', outlet: 'name'
 
   initialize: (@archivePath, @entry) ->
-    typeClass = FileIcons.getService().iconClassForPath(@entry.path, @entry) or []
+    typeClass = FileIcons.getService().iconClassForPath(@entry.path, "archive-view") or []
     unless Array.isArray typeClass
       typeClass = typeClass?.toString().split(/\s+/g)
     

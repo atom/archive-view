@@ -175,7 +175,7 @@ describe "Archive viewer", ->
 
       it "allows multiple classes to be passed", ->
         FileIcons.setService
-          iconClassForPath: (path, entry) ->
+          iconClassForPath: (path) ->
             switch path.match(/\w*$/)[0]
               when "pdf" then "text pdf-icon document"
               when "ttf" then "binary ttf-icon font"
@@ -189,7 +189,7 @@ describe "Archive viewer", ->
 
       it "allows an array of classes to be passed", ->
         FileIcons.setService
-          iconClassForPath: (path, entry) ->
+          iconClassForPath: (path) ->
             switch path.match(/\w*$/)[0]
               when "pdf" then ["text", "pdf-icon", "document"]
               when "ttf" then ["binary", "ttf-icon", "font"]
@@ -201,12 +201,12 @@ describe "Archive viewer", ->
         runs ->
           checkMultiClass()
 
-      it "passes an ArchiveEntry as iconClassForPath's second argument", ->
+      it "identifies context to icon-service providers", ->
         FileIcons.setService
-          iconClassForPath: (path, entry) -> entry.constructor.name
+          iconClassForPath: (path, context) -> "icon-" + context
 
         waitsFor ->
           archiveView.find('.entry').length > 0
 
         runs ->
-          expect(archiveView.find('.list-item.entry:contains(adobe.pdf) > .file.icon.ArchiveEntry').length).not.toBe(0)
+          expect(archiveView.find('.list-item.entry:contains(adobe.pdf) > .file.icon-archive-view').length).not.toBe(0)
