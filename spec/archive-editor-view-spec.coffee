@@ -1,4 +1,3 @@
-fs = require 'fs-plus'
 {Disposable, File} = require 'atom'
 {$} = require 'atom-space-pen-views'
 
