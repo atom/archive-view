@@ -1,6 +1,8 @@
 {Disposable, File} = require 'atom'
 {$} = require 'atom-space-pen-views'
 
+FileIcons = require '../lib/file-icons'
+
 describe "Archive viewer", ->
   [archiveView, onDidDeleteCallback, onDidChangeCallback] = []
 
@@ -129,3 +131,81 @@ describe "Archive viewer", ->
 
       runs ->
         expect(archiveView.errorMessage.text().length).toBeGreaterThan 0
+
+  describe "FileIcons", ->
+    beforeEach ->
+      waitsForPromise ->
+        atom.workspace.open('file-icons.zip')
+
+      runs ->
+        archiveView = $(atom.views.getView(atom.workspace.getActivePaneItem())).view()
+        jasmine.attachToDOM(atom.views.getView(atom.workspace))
+
+    describe "Icon service", ->
+      it "provides a default service", ->
+        expect(FileIcons.getService()).toBeDefined()
+        expect(FileIcons.getService()).not.toBeNull()
+
+      it "allows the default to be overridden", ->
+        service = iconClassForPath: ->
+        FileIcons.setService(service)
+        expect(FileIcons.getService()).toBe(service)
+
+      it "allows service to be reset without hassle", ->
+        service = iconClassForPath: ->
+        FileIcons.setService(service)
+        FileIcons.resetService()
+        expect(FileIcons.getService()).not.toBe(service)
+
+    describe "Class handling", ->
+      checkMultiClass = ->
+        expect(archiveView.find('.list-item.entry:contains(adobe.pdf)  > .file.icon')[0].className).toBe("file icon text pdf-icon document")
+        expect(archiveView.find('.list-item.entry:contains(spacer.gif) > .file.icon')[0].className).toBe("file icon binary gif-icon image")
+        expect(archiveView.find('.list-item.entry:contains(font.ttf)   > .file.icon')[0].className).toBe("file icon binary ttf-icon font")
+
+      it "displays default file-icons", ->
+        waitsFor ->
+          archiveView.find('.entry').length > 0
+
+        runs ->
+          expect(archiveView.find('.list-item.entry:contains(adobe.pdf)  > .file.icon.icon-file-pdf').length).not.toBe(0)
+          expect(archiveView.find('.list-item.entry:contains(spacer.gif) > .file.icon.icon-file-media').length).not.toBe(0)
+          expect(archiveView.find('.list-item.entry:contains(sunn.o)     > .file.icon.icon-file-binary').length).not.toBe(0)
+
+      it "allows multiple classes to be passed", ->
+        FileIcons.setService
+          iconClassForPath: (path) ->
+            switch path.match(/\w*$/)[0]
+              when "pdf" then "text pdf-icon document"
+              when "ttf" then "binary ttf-icon font"
+              when "gif" then "binary gif-icon image"
+
+        waitsFor ->
+          archiveView.find('.entry').length > 0
+
+        runs ->
+          checkMultiClass()
+
+      it "allows an array of classes to be passed", ->
+        FileIcons.setService
+          iconClassForPath: (path) ->
+            switch path.match(/\w*$/)[0]
+              when "pdf" then ["text", "pdf-icon", "document"]
+              when "ttf" then ["binary", "ttf-icon", "font"]
+              when "gif" then ["binary", "gif-icon", "image"]
+
+        waitsFor ->
+          archiveView.find('.entry').length > 0
+
+        runs ->
+          checkMultiClass()
+
+      it "identifies context to icon-service providers", ->
+        FileIcons.setService
+          iconClassForPath: (path, context) -> "icon-" + context
+
+        waitsFor ->
+          archiveView.find('.entry').length > 0
+
+        runs ->
+          expect(archiveView.find('.list-item.entry:contains(adobe.pdf) > .file.icon-archive-view').length).not.toBe(0)

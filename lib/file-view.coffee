@@ -4,6 +4,8 @@ fs = require 'fs-plus'
 temp = require 'temp'
 archive = require 'ls-archive'
 
+FileIcons = require './file-icons'
+
 module.exports =
 class FileView extends View
   @content: (archivePath, entry) ->
@@ -11,10 +13,11 @@ class FileView extends View
       @span entry.getName(), class: 'file icon', outlet: 'name'
 
   initialize: (@archivePath, @entry) ->
-    if @entry.isSymbolicLink()
-      @name.addClass('icon-file-symlink-file')
-    else
-      @name.addClass('icon-file-text')
+    typeClass = FileIcons.getService().iconClassForPath(@entry.path, "archive-view") or []
+    unless Array.isArray typeClass
+      typeClass = typeClass?.toString().split(/\s+/g)
+    
+    @name.addClass(typeClass.join(" "))
 
     @on 'click', =>
       @select()

@@ -3,6 +3,7 @@ path = require 'path'
 fs = require 'fs-plus'
 Serializable = require 'serializable'
 {Emitter, File} = require 'atom'
+FileIcons = require './file-icons'
 
 isPathSupported = (filePath) ->
   switch path.extname(filePath)
@@ -34,6 +35,11 @@ class ArchiveEditor extends Serializable
       params
     else
       console.warn "Could not build archive editor for path '#{params.path}' because that file no longer exists"
+
+  @consumeFileIcons: (service) ->
+    FileIcons.setService(service)
+    @fileIconsDisposable = service.onWillDeactivate ->
+      FileIcons.resetService()
 
   getPath: ->
     @file.getPath()
