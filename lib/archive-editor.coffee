@@ -2,7 +2,7 @@ path = require 'path'
 
 fs = require 'fs-plus'
 Serializable = require 'serializable'
-{Emitter, File} = require 'atom'
+{Disposable, Emitter, File} = require 'atom'
 FileIcons = require './file-icons'
 
 isPathSupported = (filePath) ->
@@ -38,7 +38,7 @@ class ArchiveEditor extends Serializable
 
   @consumeFileIcons: (service) ->
     FileIcons.setService(service)
-    @fileIconsDisposable = service.onWillDeactivate ->
+    new Disposable ->
       FileIcons.resetService()
 
   getPath: ->
