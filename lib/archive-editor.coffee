@@ -4,6 +4,7 @@ fs = require 'fs-plus'
 Serializable = require 'serializable'
 {Disposable, Emitter, File} = require 'atom'
 FileIcons = require './file-icons'
+ArchiveEditorView = require './archive-editor-view'
 
 isPathSupported = (filePath) ->
   switch path.extname(filePath)
@@ -25,7 +26,8 @@ class ArchiveEditor extends Serializable
 
   constructor: ({path}) ->
     @file = new File(path)
-    @emitter = new Emitter()
+    @view = new ArchiveEditorView(this)
+    @element = @view.element
 
   serializeParams: ->
     path: @getPath()
@@ -45,12 +47,7 @@ class ArchiveEditor extends Serializable
     @file.getPath()
 
   destroy: ->
-    @emitter.emit 'did-destroy'
-
-  onDidDestroy: (callback) ->
-    @emitter.on 'did-destroy', callback
-
-  getViewClass: -> require './archive-editor-view'
+    @view.destroy()
 
   getTitle: ->
     if @getPath()?
