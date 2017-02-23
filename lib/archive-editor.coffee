@@ -59,6 +59,3 @@ class ArchiveEditor extends Serializable
 
   isEqual: (other) ->
     other instanceof ArchiveEditor and @getURI() is other.getURI()
-
-if parseFloat(atom.getVersion()) < 1.7
-  atom.deserializers.add(ArchiveEditor)
