@@ -25,6 +25,7 @@ class ArchiveEditor extends Serializable
         new ArchiveEditor(path: filePath)
 
   constructor: ({path}) ->
+    @emitter = new Emitter()
     @file = new File(path)
     @view = new ArchiveEditorView(this)
     @element = @view.element
@@ -48,6 +49,10 @@ class ArchiveEditor extends Serializable
 
   destroy: ->
     @view.destroy()
+    @emitter.emit 'did-destroy'
+
+  onDidDestroy: (callback) ->
+    @emitter.on 'did-destroy', callback
 
   getTitle: ->
     if @getPath()?
