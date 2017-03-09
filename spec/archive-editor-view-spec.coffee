@@ -1,6 +1,6 @@
 {Disposable, File} = require 'atom'
 
-FileIcons = require '../lib/file-icons'
+IconServices = require '../lib/icon-services'
 
 describe "Archive viewer", ->
   [archiveEditor, onDidDeleteCallback, onDidChangeCallback] = []
@@ -143,19 +143,19 @@ describe "Archive viewer", ->
 
     describe "Icon service", ->
       it "provides a default service", ->
-        expect(FileIcons.getService()).toBeDefined()
-        expect(FileIcons.getService()).not.toBeNull()
+        expect(IconServices.get 'file-icons').toBeDefined()
+        expect(IconServices.get 'file-icons').not.toBeNull()
 
       it "allows the default to be overridden", ->
         service = iconClassForPath: ->
-        FileIcons.setService(service)
-        expect(FileIcons.getService()).toBe(service)
+        IconServices.set 'file-icons', service
+        expect(IconServices.get 'file-icons').toBe(service)
 
       it "allows service to be reset without hassle", ->
         service = iconClassForPath: ->
-        FileIcons.setService(service)
-        FileIcons.resetService()
-        expect(FileIcons.getService()).not.toBe(service)
+        IconServices.set 'file-icons', service
+        IconServices.reset 'file-icons'
+        expect(IconServices.get 'file-icons').not.toBe(service)
 
     describe "Class handling", ->
       findEntryContainingText = (text) ->
@@ -179,7 +179,7 @@ describe "Archive viewer", ->
           expect(findEntryContainingText('sunn.o').querySelector('.file.icon.icon-file-binary').length).not.toBe(0)
 
       it "allows multiple classes to be passed", ->
-        FileIcons.setService
+        IconServices.set 'file-icons',
           iconClassForPath: (path) ->
             switch path.match(/\w*$/)[0]
               when "pdf" then "text pdf-icon document"
@@ -193,7 +193,7 @@ describe "Archive viewer", ->
           checkMultiClass()
 
       it "allows an array of classes to be passed", ->
-        FileIcons.setService
+        IconServices.set 'file-icons',
           iconClassForPath: (path) ->
             switch path.match(/\w*$/)[0]
               when "pdf" then ["text", "pdf-icon", "document"]
@@ -207,7 +207,7 @@ describe "Archive viewer", ->
           checkMultiClass()
 
       it "identifies context to icon-service providers", ->
-        FileIcons.setService
+        IconServices.set 'file-icons',
           iconClassForPath: (path, context) -> "icon-" + context
 
         waitsFor ->
