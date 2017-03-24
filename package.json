@@ -1,6 +1,6 @@
 {
   "name": "archive-view",
-  "version": "0.63.1",
+  "version": "0.63.2",
   "description": "View the files and folders inside archive files",
   "main": "./lib/archive-editor",
   "dependencies": {
