@@ -133,7 +133,7 @@ describe "Archive viewer", ->
         expect(archiveEditor.view.refs.errorMessage.textContent.length).toBeGreaterThan 0
 
   describe "FileIcons", ->
-    beforeEach ->
+    openFile = ->
       waitsForPromise ->
         atom.workspace.open('file-icons.zip')
 
@@ -142,6 +142,8 @@ describe "Archive viewer", ->
         jasmine.attachToDOM(atom.views.getView(atom.workspace))
 
     describe "Icon service", ->
+      beforeEach -> openFile()
+
       it "provides a default service", ->
         expect(IconServices.get 'file-icons').toBeDefined()
         expect(IconServices.get 'file-icons').not.toBeNull()
@@ -170,6 +172,8 @@ describe "Archive viewer", ->
         expect(findEntryContainingText('font.ttf').querySelector('.file.icon').className).toBe("file icon binary ttf-icon font")
 
       it "displays default file-icons", ->
+        openFile()
+
         waitsFor ->
           archiveEditor.element.querySelectorAll('.entry').length > 0
 
@@ -186,6 +190,8 @@ describe "Archive viewer", ->
               when "ttf" then "binary ttf-icon font"
               when "gif" then "binary gif-icon image"
 
+        openFile()
+
         waitsFor ->
           archiveEditor.element.querySelectorAll('.entry').length > 0
 
@@ -200,6 +206,8 @@ describe "Archive viewer", ->
               when "ttf" then ["binary", "ttf-icon", "font"]
               when "gif" then ["binary", "gif-icon", "image"]
 
+        openFile()
+
         waitsFor ->
           archiveEditor.element.querySelectorAll('.entry').length > 0
 
@@ -209,6 +217,8 @@ describe "Archive viewer", ->
       it "identifies context to icon-service providers", ->
         IconServices.set 'file-icons',
           iconClassForPath: (path, context) -> "icon-" + context
+
+        openFile()
 
         waitsFor ->
           archiveEditor.element.querySelectorAll('.entry').length > 0
