@@ -47,6 +47,21 @@ describe "Archive viewer", ->
       waitsFor -> archiveEditor.element.querySelectorAll('.entry').length > 0
       runs -> expect(archiveEditor.element.querySelector('.selected').textContent).toBe 'f1.txt'
 
+  describe "archive summary", ->
+    beforeEach ->
+      waitsForPromise ->
+        atom.workspace.open('multiple-entries.zip')
+
+      runs ->
+        archiveEditor = atom.workspace.getActivePaneItem()
+        jasmine.attachToDOM(atom.views.getView(atom.workspace))
+    
+    it "shows correct archive summary", ->
+      waitsFor -> archiveEditor.element.querySelectorAll('.entry').length > 0
+
+      runs ->
+        expect(archiveEditor.element.querySelector('.inset-panel .panel-heading').textContent).toBe '704 bytes with 4 files and 1 folder'
+
   describe "when core:move-up/core:move-down is triggered", ->
     it "selects the next/previous file", ->
       waitsFor ->
