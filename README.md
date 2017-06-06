@@ -1,6 +1,8 @@
 # Archive view package
 [![OS X Build Status](https://travis-ci.org/atom/archive-view.svg?branch=master)](https://travis-ci.org/atom/archive-view) [![Windows Build status](https://ci.appveyor.com/api/projects/status/u3qfgaod4lhriqlj/branch/master?svg=true)](https://ci.appveyor.com/project/Atom/archive-view/branch/master)  [![Dependency Status](https://david-dm.org/atom/archive-view.svg)](https://david-dm.org/atom/archive-view)
 
+[![Join the chat at https://gitter.im/atom/archive-view](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/atom/archive-view?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Adds support for browsing archive files in Atom with the following extensions:
 
 * .epub
