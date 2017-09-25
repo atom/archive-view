@@ -30,6 +30,9 @@ class ArchiveEditor extends Serializable
     @view = new ArchiveEditorView(this)
     @element = @view.element
 
+  copy: ->
+    return new ArchiveEditor({path: @getPath()})
+
   serializeParams: ->
     path: @getPath()
 
