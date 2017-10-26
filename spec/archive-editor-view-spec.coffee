@@ -160,19 +160,19 @@ describe "Archive viewer", ->
       beforeEach -> openFile()
 
       it "provides a default service", ->
-        expect(IconServices.get 'file-icons').toBeDefined()
-        expect(IconServices.get 'file-icons').not.toBeNull()
+        expect(IconServices.fileIcons).toBeDefined()
+        expect(IconServices.fileIcons).not.toBeNull()
 
       it "allows the default to be overridden", ->
         service = iconClassForPath: ->
-        IconServices.set 'file-icons', service
-        expect(IconServices.get 'file-icons').toBe(service)
+        IconServices.setFileIcons service
+        expect(IconServices.fileIcons).toBe(service)
 
       it "allows service to be reset without hassle", ->
         service = iconClassForPath: ->
-        IconServices.set 'file-icons', service
-        IconServices.reset 'file-icons'
-        expect(IconServices.get 'file-icons').not.toBe(service)
+        IconServices.setFileIcons service
+        IconServices.resetFileIcons()
+        expect(IconServices.fileIcons).not.toBe(service)
 
     describe "Class handling", ->
       findEntryContainingText = (text) ->
@@ -198,7 +198,7 @@ describe "Archive viewer", ->
           expect(findEntryContainingText('sunn.o').querySelector('.file.icon.icon-file-binary').length).not.toBe(0)
 
       it "allows multiple classes to be passed", ->
-        IconServices.set 'file-icons',
+        IconServices.setFileIcons
           iconClassForPath: (path) ->
             switch path.match(/\w*$/)[0]
               when "pdf" then "text pdf-icon document"
@@ -214,7 +214,7 @@ describe "Archive viewer", ->
           checkMultiClass()
 
       it "allows an array of classes to be passed", ->
-        IconServices.set 'file-icons',
+        IconServices.setFileIcons
           iconClassForPath: (path) ->
             switch path.match(/\w*$/)[0]
               when "pdf" then ["text", "pdf-icon", "document"]
@@ -230,7 +230,7 @@ describe "Archive viewer", ->
           checkMultiClass()
 
       it "identifies context to icon-service providers", ->
-        IconServices.set 'file-icons',
+        IconServices.setFileIcons
           iconClassForPath: (path, context) -> "icon-" + context
 
         openFile()
