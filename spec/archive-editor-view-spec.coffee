@@ -1,6 +1,6 @@
 {Disposable, File} = require 'atom'
 
-IconServices = require '../lib/icon-services'
+getIconServices = require '../lib/get-icon-services'
 
 describe "Archive viewer", ->
   [archiveEditor, onDidDeleteCallback, onDidChangeCallback] = []
@@ -55,7 +55,7 @@ describe "Archive viewer", ->
       runs ->
         archiveEditor = atom.workspace.getActivePaneItem()
         jasmine.attachToDOM(atom.views.getView(atom.workspace))
-    
+
     it "shows correct archive summary", ->
       waitsFor -> archiveEditor.element.querySelectorAll('.entry').length > 0
 
@@ -160,19 +160,19 @@ describe "Archive viewer", ->
       beforeEach -> openFile()
 
       it "provides a default service", ->
-        expect(IconServices.fileIcons).toBeDefined()
-        expect(IconServices.fileIcons).not.toBeNull()
+        expect(getIconServices().fileIcons).toBeDefined()
+        expect(getIconServices().fileIcons).not.toBeNull()
 
       it "allows the default to be overridden", ->
         service = iconClassForPath: ->
-        IconServices.setFileIcons service
-        expect(IconServices.fileIcons).toBe(service)
+        getIconServices().setFileIcons service
+        expect(getIconServices().fileIcons).toBe(service)
 
       it "allows service to be reset without hassle", ->
         service = iconClassForPath: ->
-        IconServices.setFileIcons service
-        IconServices.resetFileIcons()
-        expect(IconServices.fileIcons).not.toBe(service)
+        getIconServices().setFileIcons service
+        getIconServices().resetFileIcons()
+        expect(getIconServices().fileIcons).not.toBe(service)
 
     describe "Class handling", ->
       findEntryContainingText = (text) ->
@@ -198,7 +198,7 @@ describe "Archive viewer", ->
           expect(findEntryContainingText('sunn.o').querySelector('.file.icon.icon-file-binary').length).not.toBe(0)
 
       it "allows multiple classes to be passed", ->
-        IconServices.setFileIcons
+        getIconServices().setFileIcons
           iconClassForPath: (path) ->
             switch path.match(/\w*$/)[0]
               when "pdf" then "text pdf-icon document"
@@ -214,7 +214,7 @@ describe "Archive viewer", ->
           checkMultiClass()
 
       it "allows an array of classes to be passed", ->
-        IconServices.setFileIcons
+        getIconServices().setFileIcons
           iconClassForPath: (path) ->
             switch path.match(/\w*$/)[0]
               when "pdf" then ["text", "pdf-icon", "document"]
@@ -230,7 +230,7 @@ describe "Archive viewer", ->
           checkMultiClass()
 
       it "identifies context to icon-service providers", ->
-        IconServices.setFileIcons
+        getIconServices().setFileIcons
           iconClassForPath: (path, context) -> "icon-" + context
 
         openFile()
