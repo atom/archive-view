@@ -1,4 +1,3 @@
-// vim: ts=2
 const {Disposable, File} = require('atom')
 const getIconServices = require('../lib/get-icon-services')
 
@@ -36,18 +35,18 @@ describe ('Archive viewer', () => {
       runs(() => {
         const directoryElements = archiveEditor.element.querySelectorAll('.directory')
         expect(directoryElements.length).toBe(6)
-        expect(directoryElements.textContent).toBe('d1')
-        expect(directoryElements.textContent).toBe('d2')
-        expect(directoryElements.textContent).toBe('d3')
-        expect(directoryElements.textContent).toBe('d4')
-        expect(directoryElements.textContent).toBe('da')
-        expect(directoryElements.textContent).toBe('db')
+        expect(directoryElements[0].textContent).toBe('d1')
+        expect(directoryElements[1].textContent).toBe('d2')
+        expect(directoryElements[2].textContent).toBe('d3')
+        expect(directoryElements[3].textContent).toBe('d4')
+        expect(directoryElements[4].textContent).toBe('da')
+        expect(directoryElements[5].textContent).toBe('db')
 
         const fileElements = archiveEditor.element.querySelectorAll('.file')
         expect(fileElements.length).toBe(3)
-        expect(fileElements.textContent).toBe('f1.txt')
-        expect(fileElements.textContent).toBe('f2.txt')
-        expect(fileElements.textContent).toBe('fa.txt')
+        expect(fileElements[0].textContent).toBe('f1.txt')
+        expect(fileElements[1].textContent).toBe('f2.txt')
+        expect(fileElements[2].textContent).toBe('fa.txt')
       })
     })
 
