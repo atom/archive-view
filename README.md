@@ -1,20 +1,21 @@
 # Archive view package
-[![OS X Build Status](https://travis-ci.org/atom/archive-view.svg?branch=master)](https://travis-ci.org/atom/archive-view) [![Windows Build status](https://ci.appveyor.com/api/projects/status/u3qfgaod4lhriqlj/branch/master?svg=true)](https://ci.appveyor.com/project/Atom/archive-view/branch/master)  [![Dependency Status](https://david-dm.org/atom/archive-view.svg)](https://david-dm.org/atom/archive-view)
+[![macOS build status](https://travis-ci.org/atom/archive-view.svg?branch=master)](https://travis-ci.org/atom/archive-view)
+[![Windows build status](https://ci.appveyor.com/api/projects/status/u3qfgaod4lhriqlj/branch/master?svg=true)](https://ci.appveyor.com/project/Atom/archive-view/branch/master)  [![Dependency status](https://david-dm.org/atom/archive-view.svg)](https://david-dm.org/atom/archive-view)
 
 Adds support for browsing archive files in Atom with the following extensions:
 
-* .epub
-* .jar
-* .love
-* .nupkg
-* .tar
-* .tar.gz
-* .tgz
-* .war
-* .zip
-* .egg
-* .whl
-* .xpi
+* `.egg`
+* `.epub`
+* `.jar`
+* `.love`
+* `.nupkg`
+* `.tar`
+* `.tar.gz`
+* `.tgz`
+* `.war`
+* `.whl`
+* `.xpi`
+* `.zip`
 
 Select a file to extract it to a temp file and open it in a new editor.
 
