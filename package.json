@@ -10,6 +10,20 @@
     "ls-archive": "^1.2.1",
     "temp": "~0.8.1"
   },
+  "devDependencies": {
+    "standard": "*"
+  },
+  "standard": {
+    "env": "jasmine",
+    "globals": [
+      "atom",
+      "emit",
+      "waitsForPromise"
+    ],
+    "ignore": [
+      "spec/fixtures"
+    ]
+  },
   "repository": "https://github.com/atom/archive-view",
   "license": "MIT",
   "engines": {

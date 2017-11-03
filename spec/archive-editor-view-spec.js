@@ -1,18 +1,18 @@
 const {Disposable, File} = require('atom')
 const getIconServices = require('../lib/get-icon-services')
 
-describe ('Archive viewer', () => {
+describe('Archive viewer', () => {
   let archiveEditor, onDidDeleteCallback, onDidChangeCallback
 
   beforeEach(() => {
-    spyOn(File.prototype, 'onDidDelete').andCallFake( function (callback) {
+    spyOn(File.prototype, 'onDidDelete').andCallFake(function (callback) {
       if (/\.tar$/.test(this.getPath())) {
         onDidDeleteCallback = callback
       }
       return new Disposable()
     })
 
-    spyOn(File.prototype, 'onDidChange').andCallFake( function (callback) {
+    spyOn(File.prototype, 'onDidChange').andCallFake(function (callback) {
       if (/\.tar$/.test(this.getPath())) {
         onDidChangeCallback = callback
       }
@@ -23,7 +23,9 @@ describe ('Archive viewer', () => {
 
     waitsForPromise(() => atom.workspace.open('nested.tar'))
 
-    runs(() => archiveEditor = atom.workspace.getActivePaneItem())
+    runs(() => {
+      archiveEditor = atom.workspace.getActivePaneItem()
+    })
   })
 
   describe('.constructor()', () => {
@@ -91,12 +93,12 @@ describe ('Archive viewer', () => {
 
       runs(() => {
         expect(archiveEditor.element).toBeDefined()
-        dispatch('core:move-up')    && expect(selectedEntry).toBe('f1.txt')
-        dispatch('core:move-down')  && expect(selectedEntry).toBe('f2.txt')
-        dispatch('core:move-down')  && expect(selectedEntry).toBe('fa.txt')
-        dispatch('core:move-down')  && expect(selectedEntry).toBe('fa.txt')
-        dispatch('core:move-up')    && expect(selectedEntry).toBe('f2.txt')
-        dispatch('core:move-up')    && expect(selectedEntry).toBe('f1.txt')
+        dispatch('core:move-up') && expect(selectedEntry).toBe('f1.txt')
+        dispatch('core:move-down') && expect(selectedEntry).toBe('f2.txt')
+        dispatch('core:move-down') && expect(selectedEntry).toBe('fa.txt')
+        dispatch('core:move-down') && expect(selectedEntry).toBe('fa.txt')
+        dispatch('core:move-up') && expect(selectedEntry).toBe('f2.txt')
+        dispatch('core:move-up') && expect(selectedEntry).toBe('f1.txt')
       })
     })
   })
@@ -182,7 +184,7 @@ describe ('Archive viewer', () => {
     }
 
     describe('Icon service', () => {
-      const service = { iconClassForPath(){} }
+      const service = { iconClassForPath () {} }
       beforeEach(() => openFile())
 
       it('provides a default service', () => {
@@ -204,9 +206,9 @@ describe ('Archive viewer', () => {
 
     describe('Class handling', () => {
       function findEntryContainingText (text) {
-        for(entry of archiveEditor.element.querySelectorAll('.list-item.entry'))
-          if(entry.textContent.includes(text))
-            return entry
+        for (const entry of archiveEditor.element.querySelectorAll('.list-item.entry')) {
+          if (entry.textContent.includes(text)) { return entry }
+        }
         return null
       }
 
@@ -262,7 +264,7 @@ describe ('Archive viewer', () => {
         runs(() => checkMultiClass())
       })
 
-      it ('identifies context to icon-service providers', () => {
+      it('identifies context to icon-service providers', () => {
         getIconServices().setFileIcons({
           iconClassForPath: (path, context) => `icon-${context}`
         })
