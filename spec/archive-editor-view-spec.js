@@ -6,7 +6,7 @@ async function condition (handler) {
   if (jasmine.isSpy(window.setTimeout)) {
     jasmine.useRealClock()
   }
-  return await conditionPromise(handler)
+  return conditionPromise(handler)
 }
 
 describe('Archive viewer', () => {
