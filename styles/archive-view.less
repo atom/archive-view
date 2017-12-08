@@ -3,11 +3,11 @@
 .archive-editor {
   background-color: @inset-panel-background-color;
   overflow: auto;
-  contain: strict;
 
   .archive-container {
     height: 100%;
     width: 100%;
+    contain: strict;
 
     .inset-panel {
       border-width: 0;
@@ -15,10 +15,10 @@
       .panel-heading {
         border-radius: 0;
       }
-    }
 
-    .archive-tree {
-      padding: 5px;
+      .archive-tree {
+        padding: 5px;
+      }
     }
   }
 }
