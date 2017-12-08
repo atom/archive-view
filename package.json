@@ -8,8 +8,21 @@
     "fs-plus": "^3.0.0",
     "humanize-plus": "~1.8.2",
     "ls-archive": "^1.2.1",
-    "serializable": "^1",
     "temp": "~0.8.1"
+  },
+  "devDependencies": {
+    "standard": "*"
+  },
+  "standard": {
+    "env": {
+      "atomtest": true,
+      "browser": true,
+      "jasmine": true,
+      "node": true
+    },
+    "globals": [
+      "atom"
+    ]
   },
   "repository": "https://github.com/atom/archive-view",
   "license": "MIT",
@@ -18,9 +31,6 @@
   },
   "deserializers": {
     "ArchiveEditor": "deserialize"
-  },
-  "devDependencies": {
-    "coffeelint": "^1.9.7"
   },
   "consumedServices": {
     "atom.file-icons": {
