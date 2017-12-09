@@ -30,6 +30,7 @@
     "atom": "*"
   },
   "deserializers": {
+    "ArchiveEditor": "deserialize",
     "ArchiveEditorView": "deserialize"
   },
   "consumedServices": {
