@@ -21,3 +21,23 @@ describe "ArchiveEditor", ->
       editor = new ArchiveEditor(path: path.join(__dirname, 'fixtures', 'nested.tar'))
       newEditor = editor.copy()
       expect(newEditor.getPath()).toBe(editor.getPath())
+
+  describe ".deactivate()", ->
+    it "removes all ArchiveEditors from the workspace and does not open any new ones", ->
+      waitsForPromise -> atom.packages.activatePackage('archive-view')
+      waitsForPromise -> atom.workspace.open(path.join(__dirname, 'fixtures', 'nested.tar'))
+      waitsForPromise -> atom.workspace.open(path.join(__dirname, 'fixtures', 'invalid.zip'))
+      waitsForPromise -> atom.workspace.open()
+
+      runs ->
+        expect(atom.workspace.getPaneItems().filter((item) -> item instanceof ArchiveEditor).length).toBe(2)
+
+      waitsForPromise -> atom.packages.deactivatePackage('archive-view')
+
+      runs ->
+        expect(atom.workspace.getPaneItems().filter((item) -> item instanceof ArchiveEditor).length).toBe(0)
+
+      waitsForPromise -> atom.workspace.open(path.join(__dirname, 'fixtures', 'nested.tar'))
+
+      runs ->
+        expect(atom.workspace.getPaneItems().filter((item) -> item instanceof ArchiveEditor).length).toBe(0)
