@@ -2,16 +2,20 @@
 
 getIconServices = require '../lib/get-icon-services'
 
-describe "Archive viewer", ->
-  [archiveEditor, onDidDeleteCallback, onDidChangeCallback] = []
+describe "ArchiveEditorView", ->
+  [archiveEditorView, onDidChangeCallback, onDidRenameCallback, onDidDeleteCallback] = []
 
   beforeEach ->
-    spyOn(File::, 'onDidDelete').andCallFake (callback) ->
-      onDidDeleteCallback = callback if @getPath().match /\.tar$/
-      new Disposable
-
     spyOn(File::, 'onDidChange').andCallFake (callback) ->
       onDidChangeCallback = callback if @getPath().match /\.tar$/
+      new Disposable
+
+    spyOn(File::, 'onDidRename').andCallFake (callback) ->
+      onDidRenameCallback = callback if @getPath().match /\.tar$/
+      new Disposable
+
+    spyOn(File::, 'onDidDelete').andCallFake (callback) ->
+      onDidDeleteCallback = callback if @getPath().match /\.tar$/
       new Disposable
 
     waitsForPromise ->
@@ -21,31 +25,36 @@ describe "Archive viewer", ->
       atom.workspace.open('nested.tar')
 
     runs ->
-      archiveEditor = atom.workspace.getActivePaneItem()
+      archiveEditorView = atom.workspace.getActivePaneItem()
 
   describe ".constructor()", ->
     it "displays the files and folders in the archive file", ->
-      expect(archiveEditor.element).toExist()
+      expect(archiveEditorView.element).toExist()
 
-      waitsFor -> archiveEditor.element.querySelectorAll('.entry').length > 0
+      waitsFor -> archiveEditorView.element.querySelectorAll('.entry').length > 0
 
       runs ->
-        expect(archiveEditor.element.querySelectorAll('.directory').length).toBe 6
-        expect(archiveEditor.element.querySelectorAll('.directory')[0].textContent).toBe 'd1'
-        expect(archiveEditor.element.querySelectorAll('.directory')[1].textContent).toBe 'd2'
-        expect(archiveEditor.element.querySelectorAll('.directory')[2].textContent).toBe 'd3'
-        expect(archiveEditor.element.querySelectorAll('.directory')[3].textContent).toBe 'd4'
-        expect(archiveEditor.element.querySelectorAll('.directory')[4].textContent).toBe 'da'
-        expect(archiveEditor.element.querySelectorAll('.directory')[5].textContent).toBe 'db'
+        expect(archiveEditorView.element.querySelectorAll('.directory').length).toBe 6
+        expect(archiveEditorView.element.querySelectorAll('.directory')[0].textContent).toBe 'd1'
+        expect(archiveEditorView.element.querySelectorAll('.directory')[1].textContent).toBe 'd2'
+        expect(archiveEditorView.element.querySelectorAll('.directory')[2].textContent).toBe 'd3'
+        expect(archiveEditorView.element.querySelectorAll('.directory')[3].textContent).toBe 'd4'
+        expect(archiveEditorView.element.querySelectorAll('.directory')[4].textContent).toBe 'da'
+        expect(archiveEditorView.element.querySelectorAll('.directory')[5].textContent).toBe 'db'
 
-        expect(archiveEditor.element.querySelectorAll('.file').length).toBe 3
-        expect(archiveEditor.element.querySelectorAll('.file')[0].textContent).toBe 'f1.txt'
-        expect(archiveEditor.element.querySelectorAll('.file')[1].textContent).toBe 'f2.txt'
-        expect(archiveEditor.element.querySelectorAll('.file')[2].textContent).toBe 'fa.txt'
+        expect(archiveEditorView.element.querySelectorAll('.file').length).toBe 3
+        expect(archiveEditorView.element.querySelectorAll('.file')[0].textContent).toBe 'f1.txt'
+        expect(archiveEditorView.element.querySelectorAll('.file')[1].textContent).toBe 'f2.txt'
+        expect(archiveEditorView.element.querySelectorAll('.file')[2].textContent).toBe 'fa.txt'
 
     it "selects the first file", ->
-      waitsFor -> archiveEditor.element.querySelectorAll('.entry').length > 0
-      runs -> expect(archiveEditor.element.querySelector('.selected').textContent).toBe 'f1.txt'
+      waitsFor -> archiveEditorView.element.querySelectorAll('.entry').length > 0
+      runs -> expect(archiveEditorView.element.querySelector('.selected').textContent).toBe 'f1.txt'
+
+  describe ".copy()", ->
+    it "returns a new ArchiveEditorView for the same file", ->
+      newArchiveView = archiveEditorView.copy()
+      expect(newArchiveView.getPath()).toBe(archiveEditorView.getPath())
 
   describe "archive summary", ->
     beforeEach ->
@@ -53,41 +62,41 @@ describe "Archive viewer", ->
         atom.workspace.open('multiple-entries.zip')
 
       runs ->
-        archiveEditor = atom.workspace.getActivePaneItem()
+        archiveEditorView = atom.workspace.getActivePaneItem()
         jasmine.attachToDOM(atom.views.getView(atom.workspace))
 
     it "shows correct archive summary", ->
-      waitsFor -> archiveEditor.element.querySelectorAll('.entry').length > 0
+      waitsFor -> archiveEditorView.element.querySelectorAll('.entry').length > 0
 
       runs ->
-        expect(archiveEditor.element.querySelector('.inset-panel .panel-heading').textContent).toBe '704 bytes with 4 files and 1 folder'
+        expect(archiveEditorView.element.querySelector('.inset-panel .panel-heading').textContent).toBe '704 bytes with 4 files and 1 folder'
 
   describe "when core:move-up/core:move-down is triggered", ->
     it "selects the next/previous file", ->
       waitsFor ->
-        archiveEditor.element.querySelectorAll('.entry').length > 0
+        archiveEditorView.element.querySelectorAll('.entry').length > 0
 
       runs ->
-        atom.commands.dispatch archiveEditor.element.querySelector('.selected'), 'core:move-up'
-        expect(archiveEditor.element.querySelector('.selected').textContent).toBe 'f1.txt'
-        atom.commands.dispatch archiveEditor.element.querySelector('.selected'), 'core:move-down'
-        expect(archiveEditor.element.querySelector('.selected').textContent).toBe 'f2.txt'
-        atom.commands.dispatch archiveEditor.element.querySelector('.selected'), 'core:move-down'
-        expect(archiveEditor.element.querySelector('.selected').textContent).toBe 'fa.txt'
-        atom.commands.dispatch archiveEditor.element.querySelector('.selected'), 'core:move-down'
-        expect(archiveEditor.element.querySelector('.selected').textContent).toBe 'fa.txt'
-        atom.commands.dispatch archiveEditor.element.querySelector('.selected'), 'core:move-up'
-        expect(archiveEditor.element.querySelector('.selected').textContent).toBe 'f2.txt'
-        atom.commands.dispatch archiveEditor.element.querySelector('.selected'), 'core:move-up'
-        expect(archiveEditor.element.querySelector('.selected').textContent).toBe 'f1.txt'
+        atom.commands.dispatch archiveEditorView.element.querySelector('.selected'), 'core:move-up'
+        expect(archiveEditorView.element.querySelector('.selected').textContent).toBe 'f1.txt'
+        atom.commands.dispatch archiveEditorView.element.querySelector('.selected'), 'core:move-down'
+        expect(archiveEditorView.element.querySelector('.selected').textContent).toBe 'f2.txt'
+        atom.commands.dispatch archiveEditorView.element.querySelector('.selected'), 'core:move-down'
+        expect(archiveEditorView.element.querySelector('.selected').textContent).toBe 'fa.txt'
+        atom.commands.dispatch archiveEditorView.element.querySelector('.selected'), 'core:move-down'
+        expect(archiveEditorView.element.querySelector('.selected').textContent).toBe 'fa.txt'
+        atom.commands.dispatch archiveEditorView.element.querySelector('.selected'), 'core:move-up'
+        expect(archiveEditorView.element.querySelector('.selected').textContent).toBe 'f2.txt'
+        atom.commands.dispatch archiveEditorView.element.querySelector('.selected'), 'core:move-up'
+        expect(archiveEditorView.element.querySelector('.selected').textContent).toBe 'f1.txt'
 
   describe "when a file is clicked", ->
     it "copies the contents to a temp file and opens it in a new editor", ->
       waitsFor ->
-        archiveEditor.element.querySelectorAll('.entry').length > 0
+        archiveEditorView.element.querySelectorAll('.entry').length > 0
 
       runs ->
-        archiveEditor.element.querySelectorAll('.file')[2].click()
+        archiveEditorView.element.querySelectorAll('.file')[2].click()
 
       waitsFor ->
         atom.workspace.getActivePane().getItems().length > 1
@@ -99,10 +108,10 @@ describe "Archive viewer", ->
   describe "when core:confirm is triggered", ->
     it "copies the contents to a temp file and opens it in a new editor", ->
       waitsFor ->
-        archiveEditor.element.querySelectorAll('.entry').length > 0
+        archiveEditorView.element.querySelectorAll('.entry').length > 0
 
       runs ->
-        atom.commands.dispatch archiveEditor.element.querySelector('.file'), 'core:confirm'
+        atom.commands.dispatch archiveEditorView.element.querySelector('.file'), 'core:confirm'
 
       waitsFor ->
         atom.workspace.getActivePane().getItems().length > 1
@@ -111,25 +120,39 @@ describe "Archive viewer", ->
         expect(atom.workspace.getActivePaneItem().getText()).toBe ''
         expect(atom.workspace.getActivePaneItem().getTitle()).toBe 'f1.txt'
 
+  describe "when the file is modified", ->
+    it "refreshes the view", ->
+      waitsFor ->
+        archiveEditorView.element.querySelectorAll('.entry').length > 0
+
+      runs ->
+        spyOn(archiveEditorView, 'refresh')
+        onDidChangeCallback()
+        expect(archiveEditorView.refresh).toHaveBeenCalled()
+
+  describe "when the file is renamed", ->
+    it "refreshes the view and updates the title", ->
+      spyOn(File::, 'getPath').andReturn('nested-renamed.tar')
+
+      waitsFor ->
+        archiveEditorView.element.querySelectorAll('.entry').length > 0
+
+      runs ->
+        spyOn(archiveEditorView, 'refresh').andCallThrough()
+        spyOn(archiveEditorView, 'getTitle')
+        onDidRenameCallback()
+        expect(archiveEditorView.refresh).toHaveBeenCalled()
+        expect(archiveEditorView.getTitle).toHaveBeenCalled()
+
   describe "when the file is removed", ->
     it "destroys the view", ->
       waitsFor ->
-        archiveEditor.element.querySelectorAll('.entry').length > 0
+        archiveEditorView.element.querySelectorAll('.entry').length > 0
 
       runs ->
         expect(atom.workspace.getActivePane().getItems().length).toBe 1
         onDidDeleteCallback()
         expect(atom.workspace.getActivePaneItem()).toBeUndefined()
-
-  describe "when the file is modified", ->
-    it "refreshes the view", ->
-      waitsFor ->
-        archiveEditor.element.querySelectorAll('.entry').length > 0
-
-      runs ->
-        spyOn(archiveEditor.view, 'refresh')
-        onDidChangeCallback()
-        expect(archiveEditor.view.refresh).toHaveBeenCalled()
 
   describe "when the file is invalid", ->
     beforeEach ->
@@ -137,15 +160,15 @@ describe "Archive viewer", ->
         atom.workspace.open('invalid.zip')
 
       runs ->
-        archiveEditor = atom.workspace.getActivePaneItem()
+        archiveEditorView = atom.workspace.getActivePaneItem()
         jasmine.attachToDOM(atom.views.getView(atom.workspace))
 
     it "shows the error", ->
       waitsFor ->
-        archiveEditor.view.refs.errorMessage.offsetHeight > 0
+        archiveEditorView.refs.errorMessage.offsetHeight > 0
 
       runs ->
-        expect(archiveEditor.view.refs.errorMessage.textContent.length).toBeGreaterThan 0
+        expect(archiveEditorView.refs.errorMessage.textContent.length).toBeGreaterThan 0
 
   describe "FileIcons", ->
     openFile = ->
@@ -153,7 +176,7 @@ describe "Archive viewer", ->
         atom.workspace.open('file-icons.zip')
 
       runs ->
-        archiveEditor = atom.workspace.getActivePaneItem()
+        archiveEditorView = atom.workspace.getActivePaneItem()
         jasmine.attachToDOM(atom.views.getView(atom.workspace))
 
     describe "Icon service", ->
@@ -176,7 +199,7 @@ describe "Archive viewer", ->
 
     describe "Class handling", ->
       findEntryContainingText = (text) ->
-        for entry in archiveEditor.element.querySelectorAll('.list-item.entry')
+        for entry in archiveEditorView.element.querySelectorAll('.list-item.entry')
           if entry.textContent.includes(text)
             return entry
         return null
@@ -190,7 +213,7 @@ describe "Archive viewer", ->
         openFile()
 
         waitsFor ->
-          archiveEditor.element.querySelectorAll('.entry').length > 0
+          archiveEditorView.element.querySelectorAll('.entry').length > 0
 
         runs ->
           expect(findEntryContainingText('adobe.pdf').querySelector('.file.icon.icon-file-pdf').length).not.toBe(0)
@@ -208,7 +231,7 @@ describe "Archive viewer", ->
         openFile()
 
         waitsFor ->
-          archiveEditor.element.querySelectorAll('.entry').length > 0
+          archiveEditorView.element.querySelectorAll('.entry').length > 0
 
         runs ->
           checkMultiClass()
@@ -224,7 +247,7 @@ describe "Archive viewer", ->
         openFile()
 
         waitsFor ->
-          archiveEditor.element.querySelectorAll('.entry').length > 0
+          archiveEditorView.element.querySelectorAll('.entry').length > 0
 
         runs ->
           checkMultiClass()
@@ -236,7 +259,7 @@ describe "Archive viewer", ->
         openFile()
 
         waitsFor ->
-          archiveEditor.element.querySelectorAll('.entry').length > 0
+          archiveEditorView.element.querySelectorAll('.entry').length > 0
 
         runs ->
           expect(findEntryContainingText('adobe.pdf').querySelectorAll('.file.icon-archive-view').length).not.toBe(0)

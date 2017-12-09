@@ -30,7 +30,8 @@
     "atom": "*"
   },
   "deserializers": {
-    "ArchiveEditor": "deserialize"
+    "ArchiveEditor": "deserialize",
+    "ArchiveEditorView": "deserialize"
   },
   "consumedServices": {
     "atom.file-icons": {
