@@ -1,6 +1,6 @@
 {
   "name": "archive-view",
-  "version": "0.64.1",
+  "version": "0.64.2",
   "description": "View the files and folders inside archive files",
   "main": "./lib/archive-editor",
   "dependencies": {
@@ -30,7 +30,8 @@
     "atom": "*"
   },
   "deserializers": {
-    "ArchiveEditor": "deserialize"
+    "ArchiveEditor": "deserialize",
+    "ArchiveEditorView": "deserialize"
   },
   "consumedServices": {
     "atom.file-icons": {

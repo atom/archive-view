@@ -1,5 +1,6 @@
 const path = require('path')
 const ArchiveEditor = require('../lib/archive-editor')
+const ArchiveEditorView = require('../lib/archive-editor-view')
 
 describe('ArchiveEditor', () => {
   const tarPath = path.join(__dirname, 'fixtures', 'nested.tar')
@@ -9,7 +10,7 @@ describe('ArchiveEditor', () => {
 
   describe('.deserialize', () => {
     it('returns undefined if no file exists at the given path', () => {
-      const editor1 = new ArchiveEditor({ path: tarPath })
+      const editor1 = new ArchiveEditorView(tarPath)
       const state = editor1.serialize()
       editor1.destroy()
 
@@ -22,11 +23,22 @@ describe('ArchiveEditor', () => {
     })
   })
 
-  describe('.copy()', () => {
-    it('returns a new ArchiveEditor for the same file', () => {
-      const oldEditor = new ArchiveEditor({ path: tarPath })
-      const newEditor = oldEditor.copy()
-      expect(newEditor.getPath()).toBe(oldEditor.getPath())
+  describe('.deactivate()', () => {
+    it('removes all ArchiveEditorViews from the workspace and does not open any new ones', async () => {
+      const getArchiveEditorViews = () => {
+        return atom.workspace.getPaneItems().filter(item => item instanceof ArchiveEditorView)
+      }
+      await atom.packages.activatePackage('archive-view')
+      await atom.workspace.open(path.join(__dirname, 'fixtures', 'nested.tar'))
+      await atom.workspace.open(path.join(__dirname, 'fixtures', 'invalid.zip'))
+      await atom.workspace.open()
+      expect(getArchiveEditorViews().length).to.equal(2)
+
+      await atom.packages.deactivatePackage('archive-view')
+      expect(getArchiveEditorViews().length).to.equal(0)
+
+      await atom.workspace.open(path.join(__dirname, 'fixtures', 'nested.tar'))
+      expect(getArchiveEditorViews().length).to.equal(0)
     })
   })
 })
