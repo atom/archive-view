@@ -68,7 +68,7 @@ describe('ArchiveEditorView', () => {
   describe('.copy()', () => {
     it('returns a new ArchiveEditorView for the same file', () => {
       const newArchiveView = archiveEditorView.copy()
-      expect(newArchiveView.getPath()).to.equal(archiveEditorView.getPath())
+      expect(newArchiveView.getPath()).toBe(archiveEditorView.getPath())
     })
   })
 
@@ -139,7 +139,7 @@ describe('ArchiveEditorView', () => {
   describe('when the file is renamed', () => {
     it('refreshes the view and updates the title', async () => {
       spyOn(File.prototype, 'getPath').andReturn('nested-renamed.tar')
-      await condition(() => archiveEditorView.element.querySelectorAlll('.entry').length > 0)
+      await condition(() => archiveEditorView.element.querySelectorAll('.entry').length > 0)
       spyOn(archiveEditorView, 'refresh').andCallThrough()
       spyOn(archiveEditorView, 'getTitle')
       onDidRenameCallback()

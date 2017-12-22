@@ -32,13 +32,13 @@ describe('ArchiveEditor', () => {
       await atom.workspace.open(path.join(__dirname, 'fixtures', 'nested.tar'))
       await atom.workspace.open(path.join(__dirname, 'fixtures', 'invalid.zip'))
       await atom.workspace.open()
-      expect(getArchiveEditorViews().length).to.equal(2)
+      expect(getArchiveEditorViews().length).toBe(2)
 
       await atom.packages.deactivatePackage('archive-view')
-      expect(getArchiveEditorViews().length).to.equal(0)
+      expect(getArchiveEditorViews().length).toBe(0)
 
       await atom.workspace.open(path.join(__dirname, 'fixtures', 'nested.tar'))
-      expect(getArchiveEditorViews().length).to.equal(0)
+      expect(getArchiveEditorViews().length).toBe(0)
     })
   })
 })
