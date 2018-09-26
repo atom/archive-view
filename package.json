@@ -11,7 +11,7 @@
     "temp": "~0.8.1"
   },
   "devDependencies": {
-    "standard": "*"
+    "standard": "^11.0.1"
   },
   "standard": {
     "env": {
