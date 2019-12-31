@@ -117,6 +117,18 @@ describe('ArchiveEditorView', () => {
     })
   })
 
+  describe('when a directory is clicked', () => {
+    it('collapses/expands itself', async () => {
+      await condition(() => archiveEditorView.element.querySelectorAll('.entry').length > 0)
+      let directory = archiveEditorView.element.querySelectorAll('.list-nested-item.entry')[0]
+      expect(directory.classList.contains('collapsed')).toBeFalsy()
+      directory.querySelector('.list-item').click()
+      expect(directory.classList.contains('collapsed')).toBeTruthy()
+      directory.querySelector('.list-item').click()
+      expect(directory.classList.contains('collapsed')).toBeFalsy()
+    })
+  })
+
   describe('when core:confirm is triggered', () => {
     it('copies the contents to a temp file and opens it in a new editor', async () => {
       await condition(() => archiveEditorView.element.querySelectorAll('.entry').length > 0)
