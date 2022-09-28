@@ -1,4 +1,5 @@
-# Archive view package
+##### Atom and all repositories under Atom will be archived on December 15, 2022. Learn more in our [official announcement](https://github.blog/2022-06-08-sunsetting-atom/)
+ # Archive view package
 [![macOS build status](https://travis-ci.org/atom/archive-view.svg?branch=master)](https://travis-ci.org/atom/archive-view)
 [![Windows build status](https://ci.appveyor.com/api/projects/status/u3qfgaod4lhriqlj/branch/master?svg=true)](https://ci.appveyor.com/project/Atom/archive-view/branch/master)  [![Dependency status](https://david-dm.org/atom/archive-view.svg)](https://david-dm.org/atom/archive-view)
 
