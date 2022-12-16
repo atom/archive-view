@@ -13,6 +13,9 @@ Adds support for browsing archive files in Atom with the following extensions:
 * `.tar`
 * `.tar.gz`
 * `.tgz`
+* `.tar.bz2`
+* `.tbz`
+* `.tbz2`
 * `.war`
 * `.whl`
 * `.xpi`
